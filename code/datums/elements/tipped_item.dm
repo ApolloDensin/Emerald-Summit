@@ -17,7 +17,7 @@
 	RegisterSignal(target, COMSIG_ITEM_ATTACKBY_BLOCKED, PROC_REF(blocked_inject))
 	RegisterSignal(target, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(clean_dip))
 
-/datum/element/tipped_item/Detach(datum/source, force)
+/datum/element/tipped_item/Detach(datum/source)
 	. = ..()
 	UnregisterSignal(source, list(COMSIG_PARENT_EXAMINE, COMSIG_ITEM_PRE_ATTACK, COMSIG_ITEM_ATTACKBY_SUCCESS, COMSIG_ITEM_ATTACKBY_BLOCKED, COMSIG_COMPONENT_CLEAN_ACT))
 

@@ -22,6 +22,7 @@
 	var/seednutrition = 0
 	var/max_seednutrition = 100
 	var/mob/planter = null
+	var/datum/proximity_monitor/proximity_monitor
 
 /obj/structure/flora/roguegrass/maneater/real/Initialize()
 	. = ..()
