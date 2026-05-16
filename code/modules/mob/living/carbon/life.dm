@@ -60,9 +60,13 @@
 	if(HAS_TRAIT(src, TRAIT_NOPAIN) && !HAS_TRAIT(src, TRAIT_CRIMSON_CURSE))
 		return
 	if(!stat)
-		var/pain_threshold = HAS_TRAIT(src, TRAIT_ADRENALINE_RUSH) ? ((STACON + 5) * 10) : (STACON * 10)
-		if(has_flaw(/datum/charflaw/masochist)) // Masochists handle pain better by about 1 endurance point
+		pain_threshold = HAS_TRAIT(src, TRAIT_ADRENALINE_RUSH) ? ((STACON + 5) * 10) : (STACON * 10)
+		if(has_flaw(/datum/charflaw/masochist)) // Masochists handle pain better by about 1 constitution point
 			pain_threshold += 10
+		if(HAS_TRAIT(src, TRAIT_NOPAINSTUN))
+			pain_threshold += 75
+		if(HAS_TRAIT(src, TRAIT_NOPAIN))
+			pain_threshold = 250
 		var/painpercent = get_complex_pain() / pain_threshold
 		painpercent = painpercent * 100
 
