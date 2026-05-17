@@ -1450,33 +1450,6 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 					append_message = "causing them to drop [target_held_item]"
 				else
 					append_message = "loosening their grip on [target_held_item]"
-
-			if(target.pulling)
-				var/painpercent = (target.get_complex_pain() / target.pain_threshold) * 100
-				var/painchance = painpercent < 30 ? FALSE : prob(painpercent)
-
-				if(target.grab_state > GRAB_PASSIVE && painchance)
-					target.grab_state = GRAB_PASSIVE
-					append_message = "causing them to loosen up on [target.pulling]"
-					target.visible_message(
-						span_danger("[target.name]'s grip on [target.pulling] loosens up!"),
-						span_warning("My grip on [target.pulling] loosens up!"),
-						null,
-						COMBAT_MESSAGE_RANGE
-					)
-					playsound(target.loc, 'sound/combat/grabstruggle.ogg', 50, TRUE, -1)
-
-				else if(target.grab_state <= GRAB_PASSIVE && painchance)
-					target.visible_message(
-						span_danger("[target.name]'s grip on [target.pulling] drops!"),
-						span_warning("My grip on [target.pulling] drops!"),
-						null,
-						COMBAT_MESSAGE_RANGE
-					)
-					append_message = "causing them to let go of [target.pulling]"
-					target.stop_pulling(TRUE)
-					playsound(target.loc, 'sound/combat/grabbreak.ogg', 50, TRUE, -1)
-
 			log_combat(user, target, "shoved", append_message)
 
 //shameless copypaste

@@ -5,7 +5,7 @@
 	chargetime = 0
 	chargedrain = 0
 	noaa = FALSE
-	swingdelay = 4
+	swingdelay = 5
 	misscost = 20
 	unarmed = TRUE
 	animname = "kick"
