@@ -1222,6 +1222,7 @@
 
 	if(moving_resist && client) //we resisted by trying to move
 		client.move_delay = world.time + 20
+	stamina_add(rand(5, 15)) //Resist attempts cost stamina so victims can't spam them frictionlessly.
 
 	if(!prob(resist_chance))
 		var/rchance = ""
