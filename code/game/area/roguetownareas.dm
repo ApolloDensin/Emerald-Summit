@@ -23,6 +23,8 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 	var/underdark_area = FALSE
 	var/church_area = FALSE
 	var/ceiling_protected = FALSE //Prevents tunneling into these from above
+	// Ratwood port (Character Customization UI): when TRUE, the stash-retrieval menu is disabled in this area.
+	var/no_special_item_retrieval = FALSE
 
 /area/rogue/Entered(mob/living/carbon/human/guy)
 

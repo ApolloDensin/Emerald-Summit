@@ -42,6 +42,9 @@
 #define ARMOR_INT_CHEST_LIGHT_STEEL 180
 #define ARMOR_INT_CHEST_CIVILIAN 100
 
+// Ratwood port (Character Customization UI loadout nerf): protection profile applied to loadout-spawned clothing.
+#define ARMOR_MIND_PROTECTION list("blunt" = 25, "slash" = 25, "stab" = 15, "piercing" = 5, "fire" = 5, "acid" = 15)
+
 // LEG PIECES - Leg Armor
 #define ARMOR_INT_LEG_ANTAG 600
 #define ARMOR_INT_LEG_BLACKSTEEL 500

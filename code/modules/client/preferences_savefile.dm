@@ -9,6 +9,28 @@
 //	This also works with decimals.
 #define SAVEFILE_VERSION_MAX	36
 
+// Ratwood port: helpers used by the Character Customization UI's preset save/load
+/proc/preferences_typepath_or_null(value)
+	if(isnull(value))
+		return null
+	if(ispath(value))
+		return value
+	if(istype(value, /datum))
+		var/datum/D = value
+		return D.type
+	return null
+
+/proc/string_to_typepath(value)
+	if(isnull(value))
+		return null
+	if(ispath(value))
+		return value
+	if(istext(value))
+		var/path = text2path(value)
+		if(ispath(path))
+			return path
+	return null
+
 /*
 SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Carn
 	This proc checks if the current directory of the savefile S needs updating
@@ -392,6 +414,70 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["loadout_2_hex"] >> loadout_2_hex
 	S["loadout_3_hex"] >> loadout_3_hex
 
+// Ratwood port: load all new fields backing the Character Customization UI.
+/datum/preferences/proc/_load_ratwood_customization(S)
+	// vice1..vice5
+	var/vice1_type
+	var/vice2_type
+	var/vice3_type
+	var/vice4_type
+	var/vice5_type
+	S["vice1"] >> vice1_type
+	S["vice2"] >> vice2_type
+	S["vice3"] >> vice3_type
+	S["vice4"] >> vice4_type
+	S["vice5"] >> vice5_type
+	// vice1 falls back to the legacy charflaw — keeps old savefiles consistent with the new schema.
+	if(vice1_type && ispath(vice1_type))
+		vice1 = new vice1_type()
+	else if(charflaw)
+		vice1 = new charflaw.type()
+	vice2 = (vice2_type && ispath(vice2_type)) ? new vice2_type() : null
+	vice3 = (vice3_type && ispath(vice3_type)) ? new vice3_type() : null
+	vice4 = (vice4_type && ispath(vice4_type)) ? new vice4_type() : null
+	vice5 = (vice5_type && ispath(vice5_type)) ? new vice5_type() : null
+
+	// loadout4..loadout10
+	for(var/i = 4 to 10)
+		var/loadout_type
+		S["loadout[i]"] >> loadout_type
+		if(loadout_type && ispath(loadout_type))
+			vars["loadout[i]"] = new loadout_type()
+
+	// hex colors 4..10
+	for(var/i = 4 to 10)
+		var/hex
+		S["loadout_[i]_hex"] >> hex
+		vars["loadout_[i]_hex"] = hex
+
+	// per-slot name/desc overrides 1..10
+	for(var/i = 1 to 10)
+		var/n
+		var/d
+		S["loadout_[i]_name"] >> n
+		S["loadout_[i]_desc"] >> d
+		vars["loadout_[i]_name"] = n
+		vars["loadout_[i]_desc"] = d
+
+	// extra_language_1, extra_language_2
+	var/lang1
+	var/lang2
+	S["extra_language_1"] >> lang1
+	S["extra_language_2"] >> lang2
+	extra_language_1 = lang1 || "None"
+	extra_language_2 = lang2 || "None"
+
+	// 3 preset slots
+	var/list/p1
+	var/list/p2
+	var/list/p3
+	S["loadout_preset_1"] >> p1
+	S["loadout_preset_2"] >> p2
+	S["loadout_preset_3"] >> p3
+	loadout_preset_1 = p1
+	loadout_preset_2 = p2
+	loadout_preset_3 = p3
+
 /datum/preferences/proc/_load_height(S)
 	var/preview_height
 	S["body_height"] >> preview_height
@@ -495,6 +581,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	_load_loadout2(S)
 	_load_loadout3(S)
 	_load_loadout_colours(S)
+	// Ratwood port: new fields backing the Character Customization UI
+	_load_ratwood_customization(S)
 
 	_load_combat_music(S)
 
@@ -777,6 +865,25 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["loadout_1_hex"], loadout_1_hex)
 	WRITE_FILE(S["loadout_2_hex"], loadout_2_hex)
 	WRITE_FILE(S["loadout_3_hex"], loadout_3_hex)
+
+	// Ratwood port: persist the Character Customization UI state.
+	WRITE_FILE(S["vice1"], preferences_typepath_or_null(vice1))
+	WRITE_FILE(S["vice2"], preferences_typepath_or_null(vice2))
+	WRITE_FILE(S["vice3"], preferences_typepath_or_null(vice3))
+	WRITE_FILE(S["vice4"], preferences_typepath_or_null(vice4))
+	WRITE_FILE(S["vice5"], preferences_typepath_or_null(vice5))
+	for(var/i = 4 to 10)
+		WRITE_FILE(S["loadout[i]"], preferences_typepath_or_null(vars["loadout[i]"]))
+	for(var/i = 4 to 10)
+		WRITE_FILE(S["loadout_[i]_hex"], vars["loadout_[i]_hex"])
+	for(var/i = 1 to 10)
+		WRITE_FILE(S["loadout_[i]_name"], vars["loadout_[i]_name"])
+		WRITE_FILE(S["loadout_[i]_desc"], vars["loadout_[i]_desc"])
+	WRITE_FILE(S["extra_language_1"], extra_language_1)
+	WRITE_FILE(S["extra_language_2"], extra_language_2)
+	WRITE_FILE(S["loadout_preset_1"], loadout_preset_1)
+	WRITE_FILE(S["loadout_preset_2"], loadout_preset_2)
+	WRITE_FILE(S["loadout_preset_3"], loadout_preset_3)
 
 	//Familiar Files
 	WRITE_FILE(S["familiar_name"] , familiar_prefs.familiar_name)

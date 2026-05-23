@@ -461,3 +461,10 @@
 		player.prefs.virtue_origin = new /datum/virtue/origin/racial/underdark
 		player.prefs.virtue_origin.job_origin = TRUE
 		player.prefs.virtue_origin.last_origin = origin_memory
+
+// Ratwood port: referenced by /datum/virtue/pack/brokensoul
+/datum/virtue/utility/tolerant
+	name = "Tolerant"
+	desc = "Whether fostered through travel or care, you just don't see an issue with certain folks."
+	custom_text = "Prevents you from experiencing negative stress events when looking at select species."
+	added_traits = list(TRAIT_TOLERANT)

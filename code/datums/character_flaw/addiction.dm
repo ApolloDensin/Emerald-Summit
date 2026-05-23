@@ -1,6 +1,8 @@
 
 /mob/living/carbon/human
 	var/datum/charflaw/charflaw
+	// Ratwood port (Character Customization UI): all currently-active vices, populated from prefs.vice1..vice5 at char-create
+	var/list/datum/charflaw/vices = list()
 
 /mob/proc/sate_addiction()
 	return

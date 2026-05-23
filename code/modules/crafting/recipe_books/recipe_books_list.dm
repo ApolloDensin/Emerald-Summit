@@ -1,6 +1,6 @@
-// Deleted the flavorful desc from Vanderlin until I can think of a better desc. 
 /obj/item/recipe_book/leatherworking
 	name = "The Tanned Hide Tome: Mastery of Leather and Craft"
+	desc = "A book full of recipes and tips for tanning hides and working leather. Can be used as fuel in a pinch."
 	icon_state = "book8_0"
 	base_icon_state = "book8"
 
@@ -11,6 +11,7 @@
 
 /obj/item/recipe_book/sewing
 	name = "Threads of Destiny: A Tailor's Codex"
+	desc = "A book full of recipes and tips for sewing cloth and stitching garments. Can be used as fuel in a pinch."
 	icon_state = "book7_0"
 	base_icon_state = "book7"
 
@@ -21,6 +22,7 @@
 
 /obj/item/recipe_book/blacksmithing
 	name = "The Smith’s Legacy"
+	desc = "A book full of recipes and tips for smithing weapons, armor, and tools at the anvil. Can be used as fuel in a pinch."
 	icon_state = "book3_0"
 	base_icon_state = "book3"
 
@@ -28,6 +30,7 @@
 
 /obj/item/recipe_book/engineering
 	name = "The Artificer's Handbook"
+	desc = "A book full of recipes and tips for engineering mechanisms and contraptions. Can be used as fuel in a pinch."
 	icon_state = "book4_0"
 	base_icon_state = "book4"
 
@@ -39,6 +42,7 @@
 // Later 
 /obj/item/recipe_book/builder
 	name = "The Builder's Handbook - For Carpenters and Masons"
+	desc = "A book full of recipes and tips for carpentry and masonry, covering structures of wood and stone alike. Can be used as fuel in a pinch."
 	icon_state = "book5_0"
 	base_icon_state = "book5"
 
@@ -48,6 +52,7 @@
 
 /obj/item/recipe_book/ceramics
 	name = "The Potter's Handbook"
+	desc = "A book full of recipes and tips for shaping clay at the wheel and firing it into pottery. Can be used as fuel in a pinch."
 	icon_state = "book5_0"
 	base_icon_state = "book5"
 
@@ -71,6 +76,7 @@
 // TBD - Cauldron Recipes
 /obj/item/recipe_book/alchemy
 	name = "Secrets of Alchemy"
+	desc = "A book full of recipes and tips for grinding reagents, brewing in the cauldron, and assembling alchemical apparatus. Can be used as fuel in a pinch."
 	icon_state = "book3_0"
 	base_icon_state = "book3"
 
@@ -97,6 +103,7 @@
 
 /obj/item/recipe_book/magic
 	name = "The Magister's Grimoire"
+	desc = "A book full of recipes and tips for crafting arcane focuses, gemstaves, and ritual runes. Can be used as fuel in a pinch."
 	icon_state = "book4_0"
 	base_icon_state = "book4"
 

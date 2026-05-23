@@ -94,6 +94,15 @@ GLOBAL_LIST_INIT(special_traits, build_special_traits())
 		else
 			to_chat(character, "Incorrect Second Virtue parameters! It will not be applied.")
 
+	// Ratwood port (Character Customization UI): triumph-purchased extra languages apply unconditionally,
+	// regardless of origin. extra_language stays origin-gated for back-compat with the free-language slot.
+	var/extra_lang_1 = player.prefs.extra_language_1
+	if(extra_lang_1 && extra_lang_1 != "None" && ispath(extra_lang_1, /datum/language))
+		character.grant_language(extra_lang_1)
+	var/extra_lang_2 = player.prefs.extra_language_2
+	if(extra_lang_2 && extra_lang_2 != "None" && ispath(extra_lang_2, /datum/language))
+		character.grant_language(extra_lang_2)
+
 	var/datum/virtue/origin_type = player.prefs.virtue_origin
 	if(origin_type)
 		if((language_type && language_type != "None") && origin_type.extra_language == TRUE)

@@ -6,6 +6,12 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	var/path
 	var/donoritem			//autoset on new if null
 	var/list/ckeywhitelist
+	// Ratwood port (Character Customization UI): triumph cost for the point-buy system.
+	// Defaults to 0 so existing items are free; set per-item where balance matters.
+	var/triumph_cost = 0
+	// Ratwood port: when TRUE, this loadout item bypasses the stash-spawn nerf in handle_special_items_retrieval.
+	// Use sparingly — meant for items where the base stats are intentional (e.g. donator kits).
+	var/keep_loadout_stats = FALSE
 
 /datum/loadout_item/New()
 	if(isnull(donoritem))
@@ -16,6 +22,10 @@ GLOBAL_LIST_EMPTY(loadout_items)
 	if(ckeywhitelist && ckeywhitelist.Find(key))
 		return TRUE
 	return
+
+// Ratwood port: gates noble-only loadout items. UI-only port — default permissive.
+/datum/loadout_item/proc/nobility_check(client/C)
+	return TRUE
 
 //Miscellaneous
 

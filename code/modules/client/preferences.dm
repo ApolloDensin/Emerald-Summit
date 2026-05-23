@@ -160,6 +160,12 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/nickname = "Please Change Me"
 	var/highlight_color = "#FF0000"
 	var/datum/charflaw/charflaw
+	// Ratwood port (Character Customization UI): multi-vice slots. vice1 is required and falls back to charflaw.
+	var/datum/charflaw/vice1
+	var/datum/charflaw/vice2
+	var/datum/charflaw/vice3
+	var/datum/charflaw/vice4
+	var/datum/charflaw/vice5
 
 	var/family = FAMILY_NONE
 	var/setspouse = ""
@@ -197,10 +203,62 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/datum/loadout_item/loadout
 	var/datum/loadout_item/loadout2
 	var/datum/loadout_item/loadout3
+	// Ratwood port (Character Customization UI): extra loadout slots 4-10
+	var/datum/loadout_item/loadout4
+	var/datum/loadout_item/loadout5
+	var/datum/loadout_item/loadout6
+	var/datum/loadout_item/loadout7
+	var/datum/loadout_item/loadout8
+	var/datum/loadout_item/loadout9
+	var/datum/loadout_item/loadout10
 
 	var/loadout_1_hex
 	var/loadout_2_hex
 	var/loadout_3_hex
+	var/loadout_4_hex
+	var/loadout_5_hex
+	var/loadout_6_hex
+	var/loadout_7_hex
+	var/loadout_8_hex
+	var/loadout_9_hex
+	var/loadout_10_hex
+
+	// Ratwood port: per-slot custom name/desc overrides shown in the Loadout tab of the Character Customization UI
+	var/loadout_1_name
+	var/loadout_2_name
+	var/loadout_3_name
+	var/loadout_4_name
+	var/loadout_5_name
+	var/loadout_6_name
+	var/loadout_7_name
+	var/loadout_8_name
+	var/loadout_9_name
+	var/loadout_10_name
+
+	var/loadout_1_desc
+	var/loadout_2_desc
+	var/loadout_3_desc
+	var/loadout_4_desc
+	var/loadout_5_desc
+	var/loadout_6_desc
+	var/loadout_7_desc
+	var/loadout_8_desc
+	var/loadout_9_desc
+	var/loadout_10_desc
+
+	// Ratwood port: extra language slots beyond the single `extra_language` (Languages tab)
+	var/extra_language_1 = "None"
+	var/extra_language_2 = "None"
+
+	// Ratwood port: undo history + 3 preset slots for the Character Customization UI
+	var/list/customization_history = list()
+	var/list/loadout_preset_1
+	var/list/loadout_preset_2
+	var/list/loadout_preset_3
+	// Ratwood port: scratchpad used by the inline loadout-picker in vices_menu.dm.
+	var/list/temp_loadout_selection
+	// Ratwood port: tgui loadout-picker datum (lazy-init in open_loadout_menu).
+	var/datum/loadout_menu/loadout_menu
 
 	var/flavortext
 	var/flavortext_display
@@ -327,6 +385,10 @@ GLOBAL_LIST_EMPTY(chosen_names)
 		if (0) // Character Settings#
 			used_title = "Character Sheet"
 
+			// Character Customization entry — pinned to the top of the prefs UI for visibility.
+			// Colors match the vices_menu HTML window it opens (dark red bg, cream text, muted border).
+			dat += "<center><a style='display:inline-block; padding:6px 16px; margin:2px 0 8px 0; background-color:#1a0808; border:1px solid #7b5353; color:#d4b0b0; font-size:1.0em; text-decoration:none;' href='?_src_=prefs;preference=vices_menu;task=input'>&#x2730; Character Customization &mdash; Configure All &#x2730;</a></center>"
+
 			// Top-level menu table
 			dat += "<table style='width: 100%; line-height: 20px;'>"
 			// NEXT ROW
@@ -440,16 +502,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 							species_text = "<font color='#1cb308'>Unrestricted</font>"
 						dat += "<b>Restrict Species:</b> <a href='?_src_=prefs;preference=species_choice'>[species_text]</a><BR>"
 
-			var/datum/language/selected_lang
-			var/lang_output = "None"
-			if(ispath(extra_language, /datum/language))
-				selected_lang = extra_language
-				lang_output = initial(selected_lang.name)
-
-			dat += "[virtue_origin.extra_language ? "<b>Free Language: </b>" : "<s><b>Free Language:</b></s> "]<a href='?_src_=prefs;preference=extra_language;task=input'>[lang_output]</a><BR>"
-
-			// LETHALSTONE EDIT BEGIN: add statpack selection
-			dat += "<b>Statpack:</b> <a href='?_src_=prefs;preference=statpack;task=input'>[statpack.name]</a><BR>"
+			// Free Language / Statpack classic rows removed — see the unified Character Customization UI.
+			// extra_language and statpack vars + their Topic handlers stay so saved characters keep loading.
 			dat += "<BR>"
 //			dat += "<a href='?_src_=prefs;preference=species;task=random'>Random Species</A> "
 //			dat += "<a href='?_src_=prefs;preference=toggle_random;random_type=[RANDOM_SPECIES]'>Always Random Species: [(randomise[RANDOM_SPECIES]) ? "Yes" : "No"]</A><br>"
@@ -483,10 +537,9 @@ GLOBAL_LIST_EMPTY(chosen_names)
 //				dat += "<a href='?_src_=prefs;preference=toggle_random;random_type=[RANDOM_AGE_ANTAG]'>When Antagonist: [(randomise[RANDOM_AGE_ANTAG]) ? "Yes" : "No"]</A>"
 
 //			dat += "<b><a href='?_src_=prefs;preference=name;task=random'>Random Name</A></b><BR>"
-			dat += "<b>Virtue:</b> <a href='?_src_=prefs;preference=virtue;task=input'>[virtue]</a><BR>"
-			if(statpack.name == "Virtuous")
-				dat += "<b>Second Virtue:</b> <a href='?_src_=prefs;preference=virtuetwo;task=input'>[virtuetwo]</a><BR>"
-			dat += "<b>Vice:</b> <a href='?_src_=prefs;preference=charflaw;task=input'>[charflaw]</a><BR>"
+			// Virtue/Second Virtue/Vice/Character-Customization classic rows removed — the Character Customization
+			// entry now lives as a prominent banner at the top of the prefs UI. Underlying vars (virtue, virtuetwo,
+			// charflaw) and their Topic handlers stay so saved characters continue to load.
 			var/datum/faith/selected_faith = GLOB.faithlist[selected_patron?.associated_faith]
 			dat += "<b>Faith:</b> <a href='?_src_=prefs;preference=faith;task=input'>[selected_faith?.name || "FUCK!"]</a><BR>"
 			dat += "<b>Patron:</b> <a href='?_src_=prefs;preference=patron;task=input'>[selected_patron?.name || "FUCK!"]</a><BR>"
@@ -588,23 +641,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				dat += "<br><b>OOC Extra:</b> <a href='?_src_=prefs;preference=ooc_extra;task=input'>Change</a>"
 			dat += "<br><a href='?_src_=prefs;preference=ooc_preview;task=input'><b>Preview Examine</b></a>"
 
-			dat += "<br><b>Loadout Item I:</b> <a href='?_src_=prefs;preference=loadout_item;task=input'>[loadout ? loadout.name : "None"] </a>"
-			if (loadout_1_hex)
-				dat += "<a href='?_src_=prefs;preference=loadout1hex;task=input'> <span style='border: 1px solid #161616; background-color: [loadout_1_hex ? loadout_1_hex : "#FFFFFF"];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>"
-			else
-				dat += "<a href='?_src_=prefs;preference=loadout1hex;task=input'>(C)</a>"
-
-			dat += "<br><b>Loadout Item II:</b> <a href='?_src_=prefs;preference=loadout_item2;task=input'>[loadout2 ? loadout2.name : "None"] </a>"
-			if (loadout_2_hex)
-				dat += "<a href='?_src_=prefs;preference=loadout2hex;task=input'> <span style='border: 1px solid #161616; background-color: [loadout_2_hex ? loadout_2_hex : "#FFFFFF"];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>"
-			else
-				dat += "<a href='?_src_=prefs;preference=loadout2hex;task=input'>(C)</a>"
-
-			dat += "<br><b>Loadout Item III:</b> <a href='?_src_=prefs;preference=loadout_item3;task=input'>[loadout3 ? loadout3.name : "None"]</a>"
-			if (loadout_3_hex)
-				dat += "<a href='?_src_=prefs;preference=loadout3hex;task=input'><span style='border: 1px solid #161616; background-color: [loadout_3_hex ? loadout_3_hex : "#FFFFFF"];'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>"
-			else
-				dat += "<a href='?_src_=prefs;preference=loadout3hex;task=input'>(C)</a>"
+			// Loadout Item I/II/III classic rows removed — see the unified Character Customization UI (Loadout Items tab).
+			// loadout/loadout2/loadout3 vars and their Topic handlers stay so saved characters continue to load.
 
 			dat += "<br><b>Be a Familiar:</b><a href='?_src_=prefs;preference=familiar_prefs;task=input'>Familiar Preferences</a>"
 
@@ -1335,6 +1373,9 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		var/client/C = usr.client
 		if(C)
 			C.clear_character_previews()
+	// Ratwood port: route any href that belongs to the Character Customization UI (vices_menu / language_menu / loadout_menu) to its handler.
+	// Handler hrefs (`vice_action`, `statpack_action`, `virtue_action`, etc.) are disjoint from this Topic's `_src_=prefs` namespace, so unconditional call is safe.
+	handle_vices_menu_topic(href, href_list)
 
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user?.client || !parent)
@@ -2469,6 +2510,11 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						if(charflaw.desc)
 							to_chat(user, span_info("[charflaw.desc]"))
 
+				// Ratwood port: entry-point Topic dispatch for the Character Customization UI
+				if("vices_menu")
+					open_vices_menu(user)
+					return
+
 				if("char_accent")
 					var/selectedaccent = tgui_input_list(user, "Choose your character's accent:", "Character Preference", GLOB.character_accents)
 					if(selectedaccent)
@@ -2886,13 +2932,75 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	return 1
 
 /datum/preferences/proc/resolve_loadout_to_color(item_path)
-	if (loadout && (item_path == loadout.path) && loadout_1_hex)
+	if (loadout && (item_path == loadout.path) && loadout_1_hex && length(loadout_1_hex))
 		return loadout_1_hex
-	if (loadout2 && (item_path == loadout2.path) && loadout_2_hex)
+	if (loadout2 && (item_path == loadout2.path) && loadout_2_hex && length(loadout_2_hex))
 		return loadout_2_hex
-	if (loadout3 && (item_path == loadout3.path) && loadout_3_hex)
+	if (loadout3 && (item_path == loadout3.path) && loadout_3_hex && length(loadout_3_hex))
 		return loadout_3_hex
-	
+	if (loadout4 && (item_path == loadout4.path) && loadout_4_hex && length(loadout_4_hex))
+		return loadout_4_hex
+	if (loadout5 && (item_path == loadout5.path) && loadout_5_hex && length(loadout_5_hex))
+		return loadout_5_hex
+	if (loadout6 && (item_path == loadout6.path) && loadout_6_hex && length(loadout_6_hex))
+		return loadout_6_hex
+	if (loadout7 && (item_path == loadout7.path) && loadout_7_hex && length(loadout_7_hex))
+		return loadout_7_hex
+	if (loadout8 && (item_path == loadout8.path) && loadout_8_hex && length(loadout_8_hex))
+		return loadout_8_hex
+	if (loadout9 && (item_path == loadout9.path) && loadout_9_hex && length(loadout_9_hex))
+		return loadout_9_hex
+	if (loadout10 && (item_path == loadout10.path) && loadout_10_hex && length(loadout_10_hex))
+		return loadout_10_hex
+
+	return FALSE
+
+/datum/preferences/proc/resolve_loadout_to_name(item_path)
+	if (loadout && (item_path == loadout.path) && loadout_1_name)
+		return loadout_1_name
+	if (loadout2 && (item_path == loadout2.path) && loadout_2_name)
+		return loadout_2_name
+	if (loadout3 && (item_path == loadout3.path) && loadout_3_name)
+		return loadout_3_name
+	if (loadout4 && (item_path == loadout4.path) && loadout_4_name)
+		return loadout_4_name
+	if (loadout5 && (item_path == loadout5.path) && loadout_5_name)
+		return loadout_5_name
+	if (loadout6 && (item_path == loadout6.path) && loadout_6_name)
+		return loadout_6_name
+	if (loadout7 && (item_path == loadout7.path) && loadout_7_name)
+		return loadout_7_name
+	if (loadout8 && (item_path == loadout8.path) && loadout_8_name)
+		return loadout_8_name
+	if (loadout9 && (item_path == loadout9.path) && loadout_9_name)
+		return loadout_9_name
+	if (loadout10 && (item_path == loadout10.path) && loadout_10_name)
+		return loadout_10_name
+
+	return FALSE
+
+/datum/preferences/proc/resolve_loadout_to_desc(item_path)
+	if (loadout && (item_path == loadout.path) && loadout_1_desc)
+		return loadout_1_desc
+	if (loadout2 && (item_path == loadout2.path) && loadout_2_desc)
+		return loadout_2_desc
+	if (loadout3 && (item_path == loadout3.path) && loadout_3_desc)
+		return loadout_3_desc
+	if (loadout4 && (item_path == loadout4.path) && loadout_4_desc)
+		return loadout_4_desc
+	if (loadout5 && (item_path == loadout5.path) && loadout_5_desc)
+		return loadout_5_desc
+	if (loadout6 && (item_path == loadout6.path) && loadout_6_desc)
+		return loadout_6_desc
+	if (loadout7 && (item_path == loadout7.path) && loadout_7_desc)
+		return loadout_7_desc
+	if (loadout8 && (item_path == loadout8.path) && loadout_8_desc)
+		return loadout_8_desc
+	if (loadout9 && (item_path == loadout9.path) && loadout_9_desc)
+		return loadout_9_desc
+	if (loadout10 && (item_path == loadout10.path) && loadout_10_desc)
+		return loadout_10_desc
+
 	return FALSE
 
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, icon_updates = 1, roundstart_checks = TRUE, character_setup = FALSE, antagonist = FALSE)
@@ -2981,9 +3089,22 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 
 	character.jumpsuit_style = jumpsuit_style
 
-	if(charflaw)
+	// Ratwood port (Character Customization UI): apply up to 5 vices; first becomes the legacy single charflaw.
+	character.vices = list()
+	for(var/i = 1 to 5)
+		var/datum/charflaw/vice = vars["vice[i]"]
+		if(vice)
+			var/datum/charflaw/new_vice = new vice.type()
+			character.vices += new_vice
+			new_vice.on_mob_creation(character)
+			if(i == 1)
+				character.charflaw = new_vice
+
+	// Legacy single-vice fallback for old savefiles that never used the multi-vice menu.
+	if(!length(character.vices) && charflaw)
 		character.charflaw = new charflaw.type()
 		character.charflaw.on_mob_creation(character)
+		character.vices += character.charflaw
 
 	character.dna.real_name = character.real_name
 
@@ -3217,3 +3338,38 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		dat += "[V.custom_text]"
 		dat += "</font>"
 	return dat
+
+// ===== Ratwood port: point-buy helpers used by the Character Customization UI =====
+
+/datum/preferences/proc/get_base_points()
+	return 10
+
+/datum/preferences/proc/get_vice_points()
+	var/points = 0
+	for(var/i = 1 to 5)
+		if(vars["vice[i]"])
+			points++
+	return points
+
+/datum/preferences/proc/get_loadout_points_spent()
+	var/spent = 0
+	for(var/i = 1 to 10)
+		var/datum/loadout_item/L = vars[i == 1 ? "loadout" : "loadout[i]"]
+		if(L && L.triumph_cost)
+			spent += L.triumph_cost
+	return spent
+
+// Deprecated in Ratwood — kept for back-compat with callers; languages now use actual triumphs.
+/datum/preferences/proc/get_language_points_spent()
+	var/spent = 0
+	if(extra_language_1 && extra_language_1 != "None")
+		spent += 2
+	if(extra_language_2 && extra_language_2 != "None")
+		spent += 4
+	return spent
+
+/datum/preferences/proc/get_total_points()
+	return get_base_points() + get_vice_points()
+
+/datum/preferences/proc/get_remaining_points()
+	return get_total_points() - get_loadout_points_spent()

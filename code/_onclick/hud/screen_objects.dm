@@ -85,7 +85,13 @@
 		to_chat(L, "*----*")
 		if(ishuman(usr))
 			var/mob/living/carbon/human/M = usr
-			if(M.charflaw)
+			// Emerald port: show ALL vices, not just the legacy single charflaw. character.vices is populated
+			// from prefs.vice1..vice5 at spawn; falls back to charflaw if multi-vice system wasn't used.
+			if(length(M.vices))
+				for(var/datum/charflaw/V in M.vices)
+					to_chat(M, "<span class='info'>[V.desc]</span>")
+				to_chat(M, "*----*")
+			else if(M.charflaw)
 				to_chat(M, "<span class='info'>[M.charflaw.desc]</span>")
 				to_chat(M, "*----*")
 			if(M.mind)
@@ -1622,7 +1628,12 @@
 	if(ishuman(usr))
 		var/mob/living/carbon/human/M = usr
 		if(modifiers["left"])
-			if(M.charflaw)
+			// Emerald port: show ALL vices, not just the legacy single charflaw.
+			if(length(M.vices))
+				to_chat(M, "*----*")
+				for(var/datum/charflaw/V in M.vices)
+					to_chat(M, span_info("[V.desc]"))
+			else if(M.charflaw)
 				to_chat(M, "*----*")
 				to_chat(M, span_info("[M.charflaw.desc]"))
 			to_chat(M, "*--------*")

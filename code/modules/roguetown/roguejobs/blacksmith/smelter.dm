@@ -2,6 +2,11 @@
 /obj/item
 	var/smeltresult
 	var/smelt_bar_num = 1 //variable for tracking how many bars things smelt back into for multi-bar items
+	// Ratwood port (Character Customization UI): set when this instance was spawned from a player's loadout stash.
+	// Used by the nerf path in handle_special_items_retrieval and to gate crafting reuse of mock items.
+	var/loadout_item = FALSE
+	// Ratwood port: stores the pre-rename name when a loadout-spawned item gets a custom name override.
+	var/original_name
 // MULTIBAR SMELTING WAS DISABLED FOR BALANCE REASONS
 // DO NOT RE-ENABLE IT UNTIL FURTHER NOTICE
 /obj/machinery/light/rogue/smelter
