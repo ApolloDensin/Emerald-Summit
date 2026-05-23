@@ -27,6 +27,10 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	"Wood Arm (R)"=/datum/charflaw/limbloss/arm_r,
 	"Random or No Flaw"=/datum/charflaw/randflaw,
 	"No Flaw (3 TRIUMPHS)"=/datum/charflaw/noflaw,
+	"Blindness"=/datum/charflaw/noeyeall,
+	"Ugly"=/datum/charflaw/ugly,
+	"Eerie Beauty"=/datum/charflaw/eerie_beauty,
+	"Unintelligible"=/datum/charflaw/unintelligible,
 	))
 
 /datum/charflaw
@@ -662,3 +666,39 @@ GLOBAL_LIST_INIT(character_flaws, list(
 		user.grant_language(new_language)
 		to_chat(user, span_info("In your past, you learned the language [initial(new_language.name)]."))
 		desc += " In your past, you learned the language [initial(new_language.name)]."
+
+// ===== Ratwood port: stub charflaws referenced by vices_menu's conflict checks. =====
+// UI-only port: just enough to give vices_menu valid type paths. No runtime behavior.
+
+/datum/charflaw/noeyeall
+	name = "Blindness"
+	desc = "I lost both of my eyes long ago."
+
+/datum/charflaw/ugly
+	name = "Ugly"
+	desc = "My face is ugly and makes everyone who looks at me miserable. Incompatible with Beautiful virtue."
+
+/datum/charflaw/eerie_beauty
+	name = "Eerie Beauty"
+	desc = "Some would say my visage is an artwork created by the gods themselves; others call me an unsettling abomination. Incompatible with Socialite virtue."
+
+/datum/charflaw/unintelligible
+	name = "Unintelligible"
+	desc = "I cannot speak the common tongue!"
+
+/datum/charflaw/unintelligible/on_mob_creation(mob/user)
+	..()
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/recipient = user
+	addtimer(CALLBACK(src, PROC_REF(unintelligible_apply), recipient), 5 SECONDS)
+
+/datum/charflaw/unintelligible/proc/unintelligible_apply(mob/living/carbon/human/user)
+	if(!user)
+		return
+	if(user.advsetup)
+		addtimer(CALLBACK(src, PROC_REF(unintelligible_apply), user), 5 SECONDS)
+		return
+	user.remove_language(/datum/language/common)
+	user.adjust_skillrank(/datum/skill/misc/reading, -6, TRUE)
+	user.adjust_triumphs(1)
