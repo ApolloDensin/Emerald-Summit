@@ -253,36 +253,35 @@ Balloon Alert / Floating Text defines
 
 
 // ──────────────────────────────────────────────────────────────────────────
-// ROLE CASTE-LOCKS ABOLISHED: every race may take any role, EXCEPT ogres.
-// RACES_ALL_KINDS already omits ogre, so the former social-caste tiers below
-// are kept only as named aliases (so existing/upstream role definitions keep
-// compiling) and now all resolve to RACES_ALL_KINDS. NOTE: the names no longer
-// describe their contents — to restore caste gating, replace an alias with its
-// old list() body (recoverable from git history).
+// ROLE CASTE-LOCKS ABOLISHED for every race EXCEPT golems (and ogres). Tiers that
+// originally excluded golems now resolve to RACES_NO_GOLEM (everyone-but-golems),
+// so golems stay locked out of those roles while all other races remain open. The
+// manmade / second-class / feared tiers keep RACES_ALL_KINDS since golems were
+// always eligible there. (Full original caste lists are recoverable from git history.)
 // ──────────────────────────────────────────────────────────────────────────
-#define RACES_NOBILITY_ELIGIBLE_UP RACES_ALL_KINDS
+#define RACES_NOBILITY_ELIGIBLE_UP RACES_NO_GOLEM
 
-#define RACES_CHURCH_FAVORED_UP RACES_ALL_KINDS
+#define RACES_CHURCH_FAVORED_UP RACES_NO_GOLEM
 
-#define RACES_CHURCH_FAVORED_UP_PLUS_WILDKIN RACES_ALL_KINDS
+#define RACES_CHURCH_FAVORED_UP_PLUS_WILDKIN RACES_NO_GOLEM
 
-#define RACES_INQUISITOR RACES_ALL_KINDS
+#define RACES_INQUISITOR RACES_NO_GOLEM
 
-#define RACES_ABSOLVER RACES_ALL_KINDS
+#define RACES_ABSOLVER RACES_NO_GOLEM
 
-#define RACES_APPOINTED_OUTCASTS_UP RACES_ALL_KINDS
+#define RACES_APPOINTED_OUTCASTS_UP RACES_NO_GOLEM
 
 #define RACES_MANMADE_UP RACES_ALL_KINDS
 
 #define RACES_SECOND_CLASS_UP RACES_ALL_KINDS
 
-#define RACES_SECOND_CLASS_NO_GOLEM RACES_ALL_KINDS
+#define RACES_SECOND_CLASS_NO_GOLEM RACES_NO_GOLEM
 
 #define RACES_FEARED_UP RACES_ALL_KINDS
 
 #define RACES_ALL_KINDS list(RACES_NOBILITY_ELIGIBLE, RACES_CHURCH_FAVORED, RACES_APPOINTED_OUTCASTS, RACES_MANMADE, RACES_SECOND_CLASS, RACES_FEARED, RACES_WIDELY_REVILED)
 
-#define RACES_NO_GOLEM RACES_ALL_KINDS
+#define RACES_NO_GOLEM list(RACES_NOBILITY_ELIGIBLE, RACES_CHURCH_FAVORED, RACES_APPOINTED_OUTCASTS, RACES_SECOND_CLASS, RACES_FEARED, RACES_WIDELY_REVILED)
 
 #define NOBLE_RACES_TYPES list(\
 	/datum/species/human/northern,\
