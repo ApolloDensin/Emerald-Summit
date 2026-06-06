@@ -7,8 +7,6 @@
 	if(lying != lying_prev && rotate_on_lying)
 		var/old_lying_prev = lying_prev
 		changed++
-		ntransform.TurnTo(lying_prev , lying)
-		lying_prev = lying
 		if(src.dna?.species?.custom_rotation_icon)
 			var/mob/living/carbon/human/H = src
 			if(!(src.mobility_flags & MOBILITY_STAND))
