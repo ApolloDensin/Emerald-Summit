@@ -93,6 +93,11 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	setDir(direct)
 
+	// Match the glide duration to the 2ds move throttle above so the sprite slides exactly one
+	// tile between moves instead of snapping partway through (the default glide_size of 6 finishes
+	// a tile slower than the move cadence, which reads as choppy ghost movement).
+	set_glide_size(DELAY_TO_GLIDE_SIZE(2))
+
 	. = ..()
 
 /mob/dead/observer/screye
@@ -497,6 +502,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	client.change_view(CONFIG_GET(string/default_view))
 	client?.verbs -= GLOB.ghost_verbs
 	SStgui.on_transfer(src, mind.current) // Transfer NanoUIs.
+	// Clear any Aghost (Toggle Invisibility) state so returning to our body always restores it.
+	// admin_ghost() only resets these when re-entering via Aghost itself, so a normal "Re-enter
+	// Corpse" would otherwise leave the body permanently invisible and non-dense.
+	mind.current.invisibility = initial(mind.current.invisibility)
+	mind.current.density = initial(mind.current.density)
 	mind.current.key = key
 	return TRUE
 

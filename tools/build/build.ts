@@ -91,9 +91,12 @@ export const DmTarget = new Juke.Target({
   inputs: [
     "_maps/**",
     "code/**",
+    "modular/**",
+    "modular_*/**",
     "html/**",
     "icons/**",
     "interface/**",
+    "modular_*/**",
     "sound/**",
     "tgui/public/tgui.html",
     `${DME_NAME}.dme`,
