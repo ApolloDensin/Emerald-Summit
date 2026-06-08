@@ -37634,6 +37634,13 @@
 "juE" = (
 /turf/open/floor/rogue/cobble,
 /area/rogue/indoors/cave)
+"juI" = (
+/obj/structure/mineral_door/bars{
+	locked = 1;
+	lockid = "vault"
+	},
+/turf/open/floor/rogue/tile,
+/area/rogue/under/town/basement/keep)
 "juR" = (
 /obj/machinery/light/rogue/wallfire/candle/blue/r,
 /turf/open/floor/rogue/tile/bfloorz,
@@ -198090,7 +198097,7 @@ uMN
 iad
 quV
 bHV
-fbx
+juI
 iad
 bKp
 kIs
