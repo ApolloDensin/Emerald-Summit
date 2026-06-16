@@ -60,6 +60,17 @@
 		else
 			to_chat(src, "Your character information will no longer be viewable when masked.")
 
+/client/verb/nsfw_examine_always()
+	set category = "Options"
+	set name = "Toggle Always Show NSFW Examine"
+	if(prefs)
+		prefs.nsfw_examine_always = !prefs.nsfw_examine_always
+		prefs.save_preferences()
+		if(prefs.nsfw_examine_always)
+			to_chat(src, "Your NSFW examine info will always be shown, even when clothed.")
+		else
+			to_chat(src, "Your NSFW examine info will only be shown while naked.")
+
 /client/verb/mute_animal_emotes()
 	set category = "Options"
 	set name = "Toggle Animal Noise Emotes"
@@ -86,6 +97,24 @@
 			to_chat(src, "Others can play with you.")
 		else
 			to_chat(src, "Others can't touch you.")
+
+/client/verb/toggle_extreme_ERP()// toggles gore, ryona, and other extreme content in the ERP panel. This is separate from the regular ERP toggle for users who want to avoid just the extreme content but are okay with milder stuff.
+	set category = "Options"
+	set name = "Toggle Extreme ERP Content"
+
+	if(!usr.client.check_agevet())
+		to_chat(src, "You are not age vetted. Join the Discord server to become age vetted.")
+		return
+
+	if(prefs)
+		prefs.extreme_erp = !prefs.extreme_erp
+		prefs.save_preferences()
+		if(prefs.extreme_erp)
+			to_chat(src, "Extreme ERP content enabled in the ERP panel.")
+		else
+			if(hascall(src, "modular_handle_extreme_erp_toggle_disable"))
+				call(src, "modular_handle_extreme_erp_toggle_disable")()
+			to_chat(src, "Extreme ERP content disabled in the ERP panel.")
 
 /client/verb/toggle_compliance_notifs() // The messages need to be on-by-default while this is in its early stages.
 	set category = "Options"
