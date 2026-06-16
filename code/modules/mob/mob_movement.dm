@@ -258,9 +258,15 @@
 			return FALSE
 		if (L.compliance)
 			return FALSE
+		if(M.stamina >= M.max_stamina)
+			mob.stop_pulling()
+			to_chat(src, span_warning("I'm too exhausted to hold on! I let go of [L]!"))
+			to_chat(L, span_warning("[M] was too exhausted to hold on and let go of you!"))
+			return FALSE
 		move_delay = world.time + 10
 		to_chat(src, span_warning("I am clinging to [L]! I need a stronger grip to stop them!"))
-		return TRUE    
+		to_chat(L, span_warning("[M] is clinging to you!"))
+		return TRUE
 
 	if(isanimal(mob.pulling))
 		var/mob/living/simple_animal/bound = mob.pulling
