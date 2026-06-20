@@ -17,7 +17,7 @@
 
 /datum/reagent/medicine/minorhealthpot/on_mob_life(mob/living/carbon/M) // Heals half as much as health potion, but not wounds.
 	var/list/wCount = M.get_wounds()
-	var/heal_mult = (M.body_position == LYING_DOWN) ? 1 : 0.5 // Halve healing if the drinker isn't lying down.
+	var/heal_mult = (M.mobility_flags & MOBILITY_STAND) ? 0.5 : 1 // Halve healing if the drinker isn't lying down.
 	var/blood_restore = (M.blood_volume <= BLOOD_VOLUME_BAD ? 7 : 6) * heal_mult
 	if(M.blood_volume < BLOOD_VOLUME_NORMAL)
 		M.blood_volume = min(M.blood_volume + blood_restore, BLOOD_VOLUME_POTION_MAX)
@@ -68,7 +68,7 @@
 
 /datum/reagent/medicine/healthpot/on_mob_life(mob/living/carbon/M)
 	var/list/wCount = M.get_wounds()
-	var/heal_mult = (M.body_position == LYING_DOWN) ? 1 : 0.5 // Halve healing if the drinker isn't lying down.
+	var/heal_mult = (M.mobility_flags & MOBILITY_STAND) ? 0.5 : 1 // Halve healing if the drinker isn't lying down.
 	var/blood_restore = (M.blood_volume <= BLOOD_VOLUME_BAD ? 8 : 6) * heal_mult
 	if(M.blood_volume < BLOOD_VOLUME_NORMAL)
 		M.blood_volume = min(M.blood_volume + blood_restore, BLOOD_VOLUME_POTION_MAX) //+100 blood per sip, 960 blood per bottle. Still enough to fill up your blood twice over.
@@ -98,7 +98,7 @@
 
 /datum/reagent/medicine/stronghealth/on_mob_life(mob/living/carbon/M)
 	var/list/wCount = M.get_wounds()
-	var/heal_mult = (M.body_position == LYING_DOWN) ? 1 : 0.5 // Halve healing if the drinker isn't lying down.
+	var/heal_mult = (M.mobility_flags & MOBILITY_STAND) ? 0.5 : 1 // Halve healing if the drinker isn't lying down.
 	var/blood_restore = (M.blood_volume <= BLOOD_VOLUME_BAD ? 15 : 8) * heal_mult
 	if(M.blood_volume < BLOOD_VOLUME_NORMAL)
 		M.blood_volume = min(M.blood_volume + blood_restore, BLOOD_VOLUME_POTION_MAX) //+100 blood per sip, 960 blood per bottle. Still enough to fill up your blood twice over.
