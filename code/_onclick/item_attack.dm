@@ -208,6 +208,10 @@
 		var/offh = 0
 		var/obj/item/W = M.held_items[1]
 		if(W)
+			if(istype(W, /obj/item/reagent_containers/glass/bottle))
+				var/obj/item/reagent_containers/glass/bottle/BTL = W
+				BTL.shatter_inhand(M, user)
+				return
 			if(!(M.mobility_flags & MOBILITY_STAND))
 				M.throw_item(get_step(M,turn(M.dir, 90)), offhand = offh)
 			else
@@ -220,6 +224,10 @@
 		var/offh = 0
 		var/obj/item/W = M.held_items[2]
 		if(W)
+			if(istype(W, /obj/item/reagent_containers/glass/bottle))
+				var/obj/item/reagent_containers/glass/bottle/BTL = W
+				BTL.shatter_inhand(M, user)
+				return
 			if(!(M.mobility_flags & MOBILITY_STAND))
 				M.throw_item(get_step(M,turn(M.dir, 270)), offhand = offh)
 			else
