@@ -497,3 +497,9 @@ GLOBAL_LIST_INIT(pda_styles, sortList(list(MONO, VT, ORBITRON, SHARE)))
 #define FALL_INTERCEPTED		(1<<0) //Stops the movable from falling further and crashing on the ground
 #define FALL_NO_MESSAGE			(1<<1) //Used to suppress the "[A] falls through [old_turf]" messages where it'd make little sense at all, like going downstairs.
 #define FALL_STOP_INTERCEPTING	(1<<2) //Used in situations where halting the whole "intercept" loop would be better, like supermatter dusting (and thus deleting) the atom.
+
+// Buff-stacking flags (overeating / "stuffed" system) -- see /datum/status_effect/buff.stack_flag.
+#define STACK_FOOD (1 << 0)	// Major food buffs; we generally don't want more than 1 at a time.
+#define STACK_POT (1 << 1) // Potion / drink buffs, currently unused.
+#define STACK_ALL (1 << 2) // Non-stackable with anything; atm reserved to stat pots.
+#define STACK_MINOR (1 << 3) // You can have more than one of these before all effects kick in (single-stat buffs, e.g. a sweet's +1 stat).

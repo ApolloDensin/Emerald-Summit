@@ -2,11 +2,19 @@
 	max_stamina = max_energy / 10
 
 	var/delay = (HAS_TRAIT(src, TRAIT_APRICITY) && GLOB.tod == "day") ? 13 : 20		//Astrata 
+	if(has_status_effect(/datum/status_effect/debuff/stuffed_two)) // sloshing gut tires you out faster
+		delay *= 2
+	if(has_status_effect(/datum/status_effect/debuff/stuffed_three))
+		delay *= 4
 	if(world.time > last_fatigued + delay) //regen fatigue
 		var/added = energy / max_energy
 		added = round(-10 + (added * - 40))
 		if(src.climbing) // no stam regen while climbing guh
 			added = 0
+		if(has_status_effect(/datum/status_effect/debuff/stuffed_two)) // ...and you recover it slower
+			added *= 0.75
+		if(has_status_effect(/datum/status_effect/debuff/stuffed_three))
+			added *= 0.25
 		if(HAS_TRAIT(src, TRAIT_MISSING_NOSE))
 			added = round(added * 0.5, 1)
 		if(HAS_TRAIT(src, TRAIT_MONK_ROBE))

@@ -1,5 +1,44 @@
 /datum/status_effect/buff
 	status_type = STATUS_EFFECT_REFRESH
+	/// Bitflag (STACK_*) marking this buff as one that shouldn't be freely stacked with others. FALSE = ignored.
+	var/stack_flag = FALSE
+
+// Tallies all currently-active stacking buffs and, past a threshold, applies an escalating "stuffed"
+// debuff. Ported from Azure-Peak PR #7706 -- the anti-chemplay overeating system.
+/datum/status_effect/buff/proc/process_buffstacks()
+	if(!stack_flag)
+		return
+	var/stackweight = 0
+	var/longest_dur = 0
+	var/new_dur = 0
+	for(var/datum/status_effect/buff/status in owner.status_effects)
+		if(istype(status, /datum/status_effect/buff) && status.stack_flag)
+			// One weight per flag is the intent; for now everything stacks evenly. Granularize if needed.
+			if(status.stack_flag & STACK_FOOD || status.stack_flag & STACK_POT || status.stack_flag & STACK_ALL)
+				stackweight += 1
+			if(status.stack_flag & STACK_MINOR)
+				stackweight += 0.5
+			if(status.duration > longest_dur)
+				longest_dur = status.duration
+	if(longest_dur && longest_dur > world.time)
+		new_dur = longest_dur - world.time
+	switch(stackweight)
+		if(0 to 0.99)	// Switch comparisons are inclusive.
+			return
+		if(1 to 1.99)
+			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_one, new_dur, stackweight)
+		if(2 to 2.99)
+			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_two, new_dur, stackweight)
+		if(3 to 99)
+			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_three, new_dur, stackweight)
+
+/datum/status_effect/buff/on_apply()
+	. = ..()
+	process_buffstacks()
+
+/datum/status_effect/buff/on_remove()
+	. = ..()
+	process_buffstacks()
 
 
 /datum/status_effect/buff/drunk
@@ -28,12 +67,14 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/drunkmurk
 	effectedstats = list("intelligence" = 5)
 	duration = 2 MINUTES
+	stack_flag = STACK_FOOD
 
 /datum/status_effect/buff/nocshine
 	id = "nocshine"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/drunknoc
 	effectedstats = list("strength" = 1, "endurance" = 1)
 	duration = 2 MINUTES
+	stack_flag = STACK_FOOD
 
 /datum/status_effect/buff/foodbuff
 	id = "foodbuff"
@@ -80,6 +121,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/greatsnackbuff
 	effectedstats = list(STATKEY_CON = 1,STATKEY_END = 1) // AP STATKEY_WIL -> ES endurance
 	duration = 10 MINUTES
+	stack_flag = STACK_FOOD
 
 /datum/status_effect/buff/greatsnackbuff/on_creation(mob/living/new_owner)
 	. = ..()
@@ -130,6 +172,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/greatmealbuff
 	effectedstats = list(STATKEY_CON = 1, STATKEY_END = 1) // AP STATKEY_WIL -> ES endurance
 	duration = 30 MINUTES
+	stack_flag = STACK_FOOD
 
 /atom/movable/screen/alert/status_effect/buff/greatmealbuff
 	name = "Great Meal!"
@@ -368,6 +411,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/vitae
 	effectedstats = list("fortune" = 2)
 	duration = 1 MINUTES
+	stack_flag = STACK_FOOD
 
 /datum/status_effect/buff/vitae/on_apply()
 	. = ..()
@@ -647,6 +691,12 @@
 	return ..()
 
 /datum/status_effect/buff/healing/on_apply()
+	if(owner.has_status_effect(/datum/status_effect/debuff/stuffed_three)) // too stuffed to mend -- the gods purge the gut instead
+		owner.visible_message(span_warningbig("The gods see fit to purge [owner]'s bulging stomach!"))
+		if(iscarbon(owner))
+			var/mob/living/carbon/C = owner
+			C.vomit()
+		return FALSE
 	if(owner.construct) //golems can't be healed by miracles cuz they're not living beans
 		owner.visible_message(span_warning("The divine aura enveloping [owner]'s inorganic body sputters and fades away."))
 		qdel(src)
@@ -674,7 +724,7 @@
 	var/list/wCount = owner.get_wounds()
 	if(owner.blood_volume < BLOOD_VOLUME_NORMAL)
 		owner.blood_volume = min(owner.blood_volume+healing_on_tick, BLOOD_VOLUME_NORMAL)
-	if(wCount.len > 0)
+	if(wCount.len > 0 && !owner.has_status_effect(/datum/status_effect/debuff/stuffed_two)) // overstuffed bodies won't knit wounds
 		owner.heal_wounds(healing_on_tick)
 		owner.update_damage_overlays()
 	if(HAS_TRAIT(owner, TRAIT_SIMPLE_WOUNDS))
@@ -1528,6 +1578,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/vigorized
 	duration = 10 MINUTES
 	effectedstats = list("speed" = 1, "intelligence" = 1)
+	stack_flag = STACK_FOOD
 
 /atom/movable/screen/alert/status_effect/vigorized
 	name = "Vigorized"
