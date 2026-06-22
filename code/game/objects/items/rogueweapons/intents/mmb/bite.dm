@@ -80,6 +80,9 @@
 		to_chat(user, span_warning("Nothing to bite."))
 		return
 
+	if(HAS_TRAIT(user, TRAIT_DEADITE)) //committing to an attack ends the deadite grace period (NPC deadites end it by biting)
+		user.remove_status_effect(/datum/status_effect/debuff/deadite_grace)
+
 	next_attack_msg.Cut()
 
 	user.do_attack_animation(src, "bite")
