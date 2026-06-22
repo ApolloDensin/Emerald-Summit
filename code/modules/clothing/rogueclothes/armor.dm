@@ -1463,6 +1463,9 @@
 				if(ishuman(user))
 					var/mob/living/carbon/H = user
 					H.update_inv_armor()
+		// Legacy toggle only moved the static body_parts_covered; armor coverage and surgery access
+		// read body_parts_covered_dynamic, so the half-plate state never actually exposed anything.
+		body_parts_covered_dynamic = body_parts_covered
 
 /obj/item/clothing/suit/roguetown/armor/brigandine
 	slot_flags = ITEM_SLOT_ARMOR
