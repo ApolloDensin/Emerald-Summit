@@ -450,6 +450,51 @@
 // Adds active_game tracking and attack_self (activate-in-hand) interaction
 // to the existing /obj/item/storage/pill_bottle/dice/farkle type.
 
+// --- ES safety net: tear the game down cleanly if the dice bag is destroyed, and remove players who
+// disconnect and don't reconnect within disconnect_grace (players often come back, so we wait). ---
+/datum/farkle_game
+	/// Assoc mob -> world.time first seen disconnected; cleared on reconnect.
+	var/list/dc_since
+	/// How long a disconnected player is held before being removed from the game.
+	var/disconnect_grace = 2 MINUTES
+
+/datum/farkle_game/New()
+	. = ..()
+	dc_since = list()
+	START_PROCESSING(SSprocessing, src)
+
+/datum/farkle_game/Destroy()
+	STOP_PROCESSING(SSprocessing, src)
+	if(game_bag && !QDELETED(game_bag) && game_bag.active_game == src)
+		game_bag.active_game = null
+	game_bag = null
+	players = null
+	dc_since = null
+	return ..()
+
+/datum/farkle_game/process(delta_time)
+	if(!game_bag || QDELETED(game_bag)) // bag deleted mid-game -> end cleanly instead of dereferencing null
+		qdel(src)
+		return PROCESS_KILL
+	for(var/mob/living/player in players)
+		if(QDELETED(player) || !player.client)
+			if(isnull(dc_since[player]))
+				dc_since[player] = world.time
+			else if(world.time - dc_since[player] >= disconnect_grace)
+				dc_since -= player
+				game_bag.visible_message(span_warning("[player] never returned and is removed from the game."))
+				INVOKE_ASYNC(src, PROC_REF(leave_game), player)
+				return // handle one removal per tick; re-check next second
+		else if(!isnull(dc_since[player]))
+			dc_since -= player // reconnected within the grace window
+
+/obj/item/storage/pill_bottle/dice/farkle/Destroy()
+	if(active_game)
+		var/datum/farkle_game/G = active_game
+		active_game = null
+		qdel(G)
+	return ..()
+
 /obj/item/storage/pill_bottle/dice/farkle
 	name = "bag of farkle dice"
 	desc = "Six dice for the game of Farkle. Activate in hand (Z) to start or join a game!"
