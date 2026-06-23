@@ -23,13 +23,13 @@
 	if(longest_dur && longest_dur > world.time)
 		new_dur = longest_dur - world.time
 	switch(stackweight)
-		if(0 to 0.99)	// Switch comparisons are inclusive.
+		if(0 to 1.99)	// Switch comparisons are inclusive.
 			return
-		if(1 to 1.99)
-			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_one, new_dur, stackweight)
 		if(2 to 2.99)
+			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_one, new_dur, stackweight)
+		if(3 to 3.99)
 			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_two, new_dur, stackweight)
-		if(3 to 99)
+		if(4 to 99)
 			owner.apply_status_effect(/datum/status_effect/debuff/stuffed_three, new_dur, stackweight)
 
 /datum/status_effect/buff/on_apply()
