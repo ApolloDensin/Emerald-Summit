@@ -1214,6 +1214,7 @@ Inquisitorial armory down here
 	addtimer(CALLBACK(S, TYPE_PROC_REF(/mob/dead/observer, reenter_corpse)), 4 SECONDS)
 	sleep(41)
 	REMOVE_TRAIT(user, TRAIT_NOSSDINDICATOR, "blackmirror")
+	soundloop.stop()
 	playsound(user, 'sound/items/blackeye.ogg', 100, FALSE)
 	return
 
@@ -1320,6 +1321,10 @@ Inquisitorial armory down here
 /obj/item/inqarticles/bmirror/Initialize()
 	soundloop = new(src, FALSE)
 	. = ..()
+
+/obj/item/inqarticles/bmirror/dropped(mob/user)
+	. = ..()
+	soundloop.stop()
 
 /obj/item/inqarticles/bmirror/Destroy()
 	if(soundloop)
