@@ -47,6 +47,8 @@
 			new /obj/item/grown/log/tree/small(get_turf(src.loc))
 			if(prob(skill_level + user.goodluck(2)))	// when sawing instead of essence you get extra small log
 				new /obj/item/grown/log/tree/small(get_turf(src.loc))
+			if(prob(skill_level + user.goodluck(2)))	// same rate as chopping for lumber essence
+				new /obj/item/grown/log/tree/small/essence(get_turf(src.loc))
 			if(user.is_holding(src))
 				user.dropItemToGround(src)
 			user.mind.add_sleep_experience(/datum/skill/labor/lumberjacking, (user.STAINT*0.5))
@@ -66,6 +68,9 @@
 			new lumber(get_turf(src))
 		if(!skill_level)
 			to_chat(user, span_info("Due to inexperience, I ruin some of the timber..."))
+		if(prob(skill_level + user.goodluck(2)))
+			new /obj/item/grown/log/tree/small/essence(get_turf(user))
+			to_chat(user, span_warning("Dendor weeps..."))
 		user.mind.add_sleep_experience(/datum/skill/labor/lumberjacking, (user.STAINT*0.5))
 		playsound(src, destroy_sound, 100, TRUE)
 		qdel(src)
@@ -176,11 +181,29 @@
 				user.dropItemToGround(src)
 			for(var/i=1, i<=woodtotal, ++i)
 				new /obj/item/natural/wood/plank(get_turf(src.loc))
+			var/lumber_skill = user.get_skill_level(/datum/skill/labor/lumberjacking)
+			if(prob(lumber_skill + user.goodluck(2)))
+				new /obj/item/grown/log/tree/small/essence(get_turf(src.loc))
+				to_chat(user, span_warning("Dendor weeps..."))
+				playsound(src, pick('sound/items/gem.ogg'), 100, FALSE)
 			user.mind.add_sleep_experience(/datum/skill/craft/carpentry, (user.STAINT*0.5))
 			new /obj/effect/decal/cleanable/debris/woody(get_turf(src))
 			qdel(src)
 			return
 	..()
+
+//................	Lumber essence	............... //
+/obj/item/grown/log/tree/small/essence
+	name = "essence of lumber"
+	desc = "A mystical essence embued with the power of Dendor. Very good source of fuel."
+	icon_state = "lessence"
+	static_debris = null
+	firefuel = 60 MINUTES
+	w_class = WEIGHT_CLASS_SMALL
+	metalizer_result = /obj/item/rogueore/gold
+	grid_height = 32
+	grid_width = 32
+	dropshrink = 0.6
 
 /obj/item/grown/log/tree/bowpartial
 	name = "crude bowstave"
