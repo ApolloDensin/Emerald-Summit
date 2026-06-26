@@ -26,6 +26,10 @@
 	set_species(pick(species))
 	gender = pick(MALE, FEMALE)
 
+	var/list/deadite_firstnames = world.file2list("strings/rt/names/other/deaditenpcfirst.txt")
+	var/list/deadite_lastnames  = world.file2list("strings/rt/names/other/deaditenpclast.txt")
+	real_name = "[pick(deadite_firstnames)] [pick(deadite_lastnames)]"
+
 	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
 
 /mob/living/carbon/human/species/npc/deadite/after_creation()
@@ -35,6 +39,7 @@
 	var/datum/zombie_antag = src.mind.add_antag_datum(/datum/antagonist/zombie, team = FALSE, admin_panel = TRUE)
 	equipOutfit(new /datum/outfit/job/deadite)
 	ADD_TRAIT(src, TRAIT_DEADITE, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_SPELLCOCKBLOCK, TRAIT_GENERIC)
 	//Make sure deadite NPCs don't show up in the antag listings
 	GLOB.antagonists -= zombie_antag
 	update_body()
