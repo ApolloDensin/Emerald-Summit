@@ -21,6 +21,8 @@
 	var/ambushable = TRUE
 	var/soundpack_m
 	var/soundpack_f
+	/// Saved sources for traits forcibly stripped at transform time (restored on cure)
+	var/list/stripped_traits
 
 	var/cmode_music
 	var/list/base_intents
@@ -31,14 +33,12 @@
 	var/last_bite
 	/// Traits applied to the owner mob when we turn into a zombie
 	var/static/list/traits_zombie = list(
-		TRAIT_CRITICAL_RESISTANCE,
 		TRAIT_LIMBATTACHMENT,
 		TRAIT_BREADY,
 		TRAIT_NOMOOD,
 		TRAIT_NOHUNGER,
 		TRAIT_EASYDISMEMBER,
 		TRAIT_NOPAIN,
-		TRAIT_NOPAINSTUN,
 		TRAIT_NOBREATH,
 		TRAIT_NOBREATH,
 		TRAIT_TOXIMMUNE,
@@ -188,6 +188,11 @@
 
 		for(var/trait in traits_zombie)
 			REMOVE_TRAIT(zombie, trait, "[type]")
+		if(stripped_traits)
+			for(var/trait in stripped_traits)
+				for(var/source in stripped_traits[trait])
+					ADD_TRAIT(zombie, trait, source)
+			stripped_traits = null
 		zombie.remove_client_colour(/datum/client_colour/monochrome)
 
 		if(has_turned && become_rotman)
@@ -234,6 +239,14 @@
 
 	for(var/trait_applied in traits_zombie)
 		ADD_TRAIT(zombie, trait_applied, "[type]")
+	// Deadites must not have critical resistance or enduring (pain stun immunity) from any prior source.
+	// Save the sources so they can be restored if the player is cured.
+	for(var/forbidden in list(TRAIT_CRITICAL_RESISTANCE, TRAIT_NOPAINSTUN))
+		if(zombie.status_traits?[forbidden])
+			if(!stripped_traits)
+				stripped_traits = list()
+			stripped_traits[forbidden] = zombie.status_traits[forbidden].Copy()
+			REMOVE_TRAIT(zombie, forbidden, zombie.status_traits[forbidden].Copy())
 	if(zombie.mind)
 		special_role = zombie.mind.special_role
 		zombie.mind.special_role = name
