@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, Section, Stack } from 'tgui-core/components';
 
-import { useBackend } from '../../backend';
+import type { ActFunctionType } from '../../backend';
 import { SearchableDropdown as Dropdown } from '../common/SearchableDropdown';
 
 type MarkingEntry = {
@@ -53,6 +53,8 @@ type Data = {
   markings: MarkingsDynamicData;
   markings_static: MarkingsStaticData;
 };
+
+type MarkingsSectionProps = { data: Data; act: ActFunctionType };
 
 // Preferred display order for zone selector buttons.
 const ZONE_ORDER = [
@@ -162,8 +164,7 @@ const ZoneEditor = ({
   </Section>
 );
 
-export const MarkingsSection = () => {
-  const { act, data } = useBackend<Data>();
+export const MarkingsSection = ({ data, act }: MarkingsSectionProps) => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const markingsStatic = data.markings_static;
