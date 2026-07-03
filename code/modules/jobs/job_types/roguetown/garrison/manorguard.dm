@@ -369,6 +369,7 @@
 	switch(weapons_choice)
 		if("Sword")
 			r_hand = /obj/item/rogueweapon/sword
+			l_hand = /obj/item/rogueweapon/scabbard/sword
 			H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
 		if("Dagger")
 			H.adjust_skillrank_up_to(/datum/skill/combat/knives, 4, TRUE)
