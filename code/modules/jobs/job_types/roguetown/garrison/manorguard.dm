@@ -361,8 +361,8 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/plate/half		//Cuirass... Since they now have medium armor trait.
 	neck = /obj/item/clothing/neck/roguetown/chaincoif/iron
 	pants = /obj/item/clothing/under/roguetown/trou/leather
-	beltr = /obj/item/quiver/bullet/lead/LB
-	backl = /obj/item/gun/ballistic/arquebus
+	beltr = /obj/item/quiver/bullet/lead
+	backl = /obj/item/gun/ballistic/firearm/arquebus
 
 	H.adjust_blindness(-3)
 	var/weapons = list("Sword","Dagger","Trusty Cudgel")
