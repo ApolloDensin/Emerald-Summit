@@ -329,8 +329,7 @@
 
 	//Garrison ranged/speed class. Time to go wild
 	// traits_applied = list(TRAIT_DODGEEXPERT) (removing this per request, can be tweaked later if needed)
-	traits_applied = list(TRAIT_MEDIUMARMOR) // given so they can't have arcyne potential. sorry! you can still dodge if you want.
-	traits_applied = list(TRAIT_FUSILIER) // allow them to train their firearms
+	traits_applied = list(TRAIT_MEDIUMARMOR, TRAIT_FUSILIER) // given so they can't have arcyne potential. sorry! you can still dodge if you want. allow them to train their firearms
 	maximum_possible_slots = 2 // limited slots, guns are uncommon that not even the garrison can bring many
 	subclass_stats = list(
 		STATKEY_SPD = 3,// +1 spd so they can use their missing DE a little better
