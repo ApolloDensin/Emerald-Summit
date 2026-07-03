@@ -28,6 +28,7 @@
 		/datum/virtue/utility/blacksmith, // we don't want you repairing your stuff in combat, sorry...
 	)
 	job_traits = list(TRAIT_GUARDSMAN, TRAIT_STEELHEARTED)
+	maximum_possible_slots = 2
 
 	job_subclasses = list(
 		/datum/advclass/manorguard/footsman,
