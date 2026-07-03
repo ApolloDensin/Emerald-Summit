@@ -380,6 +380,7 @@
 		/obj/item/rope/chain = 1,
 		/obj/item/storage/keyring/guardcastle,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
+		/obj/item/powderflask = 1,
 	)
 	H.verbs |= /mob/proc/haltyell
 
