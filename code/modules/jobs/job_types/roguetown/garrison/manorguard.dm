@@ -28,12 +28,11 @@
 		/datum/virtue/utility/blacksmith, // we don't want you repairing your stuff in combat, sorry...
 	)
 	job_traits = list(TRAIT_GUARDSMAN, TRAIT_STEELHEARTED)
-	maximum_possible_slots = 2
 
 	job_subclasses = list(
 		/datum/advclass/manorguard/footsman,
 		/datum/advclass/manorguard/skirmisher,
-		/datum/advclass/manorguard/cavalry
+		/datum/advclass/manorguard/cavalry,
 		/datum/advclass/manorguard/musketeer
 	)
 
@@ -331,6 +330,7 @@
 	//Garrison ranged/speed class. Time to go wild
 	// traits_applied = list(TRAIT_DODGEEXPERT) (removing this per request, can be tweaked later if needed)
 	traits_applied = list(TRAIT_MEDIUMARMOR) // given so they can't have arcyne potential. sorry! you can still dodge if you want.
+	maximum_possible_slots = 2
 	subclass_stats = list(
 		STATKEY_SPD = 3,// +1 spd so they can use their missing DE a little better
 		STATKEY_PER = 2,
