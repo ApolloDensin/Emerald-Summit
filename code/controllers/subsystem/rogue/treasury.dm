@@ -1,6 +1,5 @@
 #define RURAL_TAX 50 // Free money. A small safety pool for lowpop mostly
 #define TREASURY_TICK_AMOUNT 6 MINUTES
-#define EXPORT_ANNOUNCE_THRESHOLD 100
 #define FOREIGNER_TAX_MULTIPLIER 1.5 //Amount that the tax rate is multiplied by for foreigners //Script Rework 1
 
 /proc/send_ooc_note(msg, name, job)
@@ -50,19 +49,40 @@ SUBSYSTEM_DEF(treasury)
 	//var/list/stipends = list() //Script Rework I
 
 /datum/controller/subsystem/treasury/Initialize()
-	treasury_value = rand(500, 1000)
-	force_set_round_statistic(STATS_STARTING_TREASURY, treasury_value)
+	var/roundstart_pop = length(GLOB.human_list)
+	var/seed = STOCKPILE_CROWN_PURCHASE_FLOOR_DEFAULT + rand(500, 1500) + (roundstart_pop * CROWN_PURSE_SEED_PER_PLAYER)
+	royal_custom_threshold = ROYAL_CUSTOM_VOLUME_BASE + (roundstart_pop * ROYAL_CUSTOM_VOLUME_PER_POP)
+	discretionary_fund = new /datum/fund("Crown's Purse", null, seed)
+	burgher_pledge_fund = new /datum/fund("Burgher Pledge", null, BURGHER_PLEDGE_BASE_REFILL * BURGHER_PLEDGE_ROUNDSTART_MULTIPLIER)
+	church_fund = new /datum/fund/church("Church Fund", null, CHURCH_FUND_SEED)
+	merchant_fund = new /datum/fund/merchant("Merchant Fund", null, MERCHANT_FUND_SEED)
+	bathhouse_fund = new /datum/fund/bathhouse("Bathhouse Fund", null, BATHHOUSE_FUND_SEED)
+	innkeeper_fund = new /datum/fund/innkeeper("Tavern Earnings", null, INNKEEPER_FUND_SEED)
+	treasury_value = discretionary_fund.balance
+	force_set_round_statistic(STATS_STARTING_TREASURY, discretionary_fund.balance)
+	record_round_statistic(STATS_PLEDGE_GENERATED, burgher_pledge_fund.balance)
 
-	for(var/path in subtypesof(/datum/roguestock/bounty))
-		var/datum/D = new path
-		stockpile_datums += D
+	// AP parity: stockpile datums must come BEFORE bounty datums so gem items match their
+	// stockpile entries first; the /bounty/treasure catch-all (item_type = /obj) only picks
+	// up gems that fall through (accept toggle off / overflow mint path).
 	for(var/path in subtypesof(/datum/roguestock/stockpile))
 		var/datum/D = new path
 		stockpile_datums += D
-	for(var/path in subtypesof(/datum/roguestock/import))
+	for(var/path in subtypesof(/datum/roguestock/bounty))
 		var/datum/D = new path
 		stockpile_datums += D
+	// Step 15: legacy /datum/roguestock/import entries replaced by GLOB.crown_imports.
+	// AP parity (Step 15): pop-scale the auto-limited stockpile caps at roundstart.
+	autoset_stockpile_limits()
 	return ..()
+
+/datum/controller/subsystem/treasury/proc/has_account(target)
+	return !isnull(bank_accounts[target])
+
+// AP parity helper (Step 16 Meister Panel). ES deviation: player accounts are integer
+// balances keyed by mob in bank_accounts, not /datum/fund accounts.
+/datum/controller/subsystem/treasury/proc/get_balance(target)
+	return bank_accounts[target] || 0
 
 /datum/controller/subsystem/treasury/fire(resumed = 0)
 	if(world.time > next_treasury_check)
@@ -71,22 +91,23 @@ SUBSYSTEM_DEF(treasury)
 			if(!initial_payment_done) // Distribute initial payments once at round start
 				initial_payment_done = TRUE
 				distribute_daily_payments()
+			// Legacy demand drift - still used by stockpile entries without a trade_good_id.
 			for(var/datum/roguestock/X in stockpile_datums)
 				if(!X.stable_price && !X.mint_item)
 					if(X.demand < initial(X.demand))
 						X.demand += rand(5,15)
 					if(X.demand > initial(X.demand))
 						X.demand -= rand(5,15)
-			for(var/datum/roguestock/stockpile/A in stockpile_datums) //Generate some remote resources
-				A.held_items[2] += A.passive_generation
-				A.held_items[2] = min(A.held_items[2],10) //To a maximum of 10
+			// AP parity: the old "remote stockpile" passive generation (held_items[2]) is gone -
+			// regional supply now lives in SSeconomy's economic regions.
 		var/area/A = GLOB.areas_by_type[/area/rogue/indoors/town/vault]
 		for(var/obj/structure/roguemachine/vaultbank/VB in A)
 			if(istype(VB))
 				VB.update_icon()
-		give_money_treasury(RURAL_TAX, "Rural Tax Collection") //Give the King's purse to the treasury
-		record_round_statistic(STATS_RURAL_TAXES_COLLECTED, RURAL_TAX)
-		total_rural_tax += RURAL_TAX
+		tick_rural_tax()
+		if(GLOB.dayspassed != last_loan_tick_day)
+			last_loan_tick_day = GLOB.dayspassed
+			tick_loans()
 		auto_export()
 
 /datum/controller/subsystem/treasury/proc/create_bank_account(name, initial_deposit)
@@ -101,20 +122,20 @@ SUBSYSTEM_DEF(treasury)
 		bank_accounts[name] = 0
 	return TRUE
 
-//increments the treasury directly (tax collection)
+// Legacy shim — callers should use mint(discretionary_fund, ...) directly when possible.
 /datum/controller/subsystem/treasury/proc/give_money_treasury(amt, source, silent = FALSE)
 	if(!amt)
 		return
-	treasury_value += amt
+	mint(discretionary_fund, amt, source)
+	// treasury_value is kept in sync by mint(); log_to_steward via old path for compat.
 	if(silent)
 		return
-	if(source)
-		log_to_steward("+[amt] to treasury ([source])")
-	else
-		log_to_steward("+[amt] to treasury")
+	log_to_steward("+[amt] to treasury ([source ? source : "unknown"])")
 
 //pays to account from treasury (payroll)
-/datum/controller/subsystem/treasury/proc/give_money_account(amt, target, source)
+// mint_new: credit is NEW money entering the realm (foreign ships paying for exports)
+// rather than a payout from the Crown's Purse - AP parity kwarg
+/datum/controller/subsystem/treasury/proc/give_money_account(amt, target, source, mint_new = FALSE)
 	if(!amt)
 		return
 	if(!target)
@@ -128,6 +149,12 @@ SUBSYSTEM_DEF(treasury)
 	for(var/X in bank_accounts)
 		if(X == target)
 			if(amt > 0)
+				// ES deviation from legacy (AP parity): account credits are drawn from the
+				// Crown's Purse, not printed - otherwise selling to the stockpile duplicated
+				// money forever since the treasury never actually paid anything out
+				if(!mint_new && !burn(discretionary_fund, amt, source || "treasury payment to [target_name]"))
+					send_ooc_note("<b>MEISTER:</b> Error: The Crown's Purse cannot cover this payment.", name = target_name)
+					return FALSE
 				bank_accounts[X] += amt  // Add funds into the player's account
 			else
 				// Check if the amount to be fined exceeds the player's account balance
@@ -135,6 +162,8 @@ SUBSYSTEM_DEF(treasury)
 					send_ooc_note("<b>MEISTER:</b> Error: Insufficient funds in the account to complete the fine.", name = target_name)
 					return FALSE  // Return early if the player has insufficient funds
 				bank_accounts[X] -= abs(amt)  // Deduct the fine amount from the player's account
+				// AP parity: fined money returns to the Crown's Purse instead of vanishing
+				mint(discretionary_fund, abs(amt), source || "fine levied on [target_name]")
 			found_account = TRUE
 			break
 	if(!found_account)
@@ -158,6 +187,7 @@ SUBSYSTEM_DEF(treasury)
 		else
 			send_ooc_note("<b>MEISTER:</b> You were fined [amt]m.", name = target_name)
 			log_to_steward("[target_name] was fined [amt]")
+	return TRUE
 
 	return TRUE
 
@@ -172,7 +202,9 @@ SUBSYSTEM_DEF(treasury)
 		return FALSE
 	var/taxed_amount = 0
 	var/original_amt = amt
-	treasury_value += amt
+	// route through the fund API (mint syncs treasury_value) so the legacy var and the
+	// Crown's Purse can never diverge - direct writes were causing reserve-ratio drift
+	mint(discretionary_fund, amt, "Bank deposit - [character.real_name]")
 	if(character in bank_accounts)
 		if(HAS_TRAIT(character, TRAIT_NOBLE))
 			bank_accounts[character] += amt
@@ -207,11 +239,11 @@ SUBSYSTEM_DEF(treasury)
 			if(bank_accounts[X] < amt)  // Check if the withdrawal amount exceeds the player's account balance
 				send_ooc_note("<b>MEISTER:</b> Error: Insufficient funds in the account to complete the withdrawal.", name = target_name)
 				return  // Return without processing the transaction
-			if(treasury_value < amt)  // Check if the amount exceeds the treasury balance
+			// fund-API-backed: burn() refuses (and syncs treasury_value) if the purse can't cover it
+			if(!burn(discretionary_fund, amt, "Bank withdrawal - [target_name]"))
 				send_ooc_note("<b>MEISTER:</b> Error: Insufficient funds in the treasury to complete the transaction.", name = target_name)
 				return  // Return early if the treasury balance is insufficient
 			bank_accounts[X] -= amt //The account accounts accountingly. Shame on you if you copy this, apple.
-			treasury_value -= amt
 			found_account = TRUE
 			break
 	if(!found_account)
@@ -274,48 +306,74 @@ SUBSYSTEM_DEF(treasury)
 		log_to_steward("Daily wages distributed: [total_paid]m total")
 
 /datum/controller/subsystem/treasury/proc/do_export(var/datum/roguestock/D, silent = FALSE)
-	if((D.held_items[1] < D.importexport_amt))
+	if(D.stockpile_amount < D.importexport_amt)
 		return FALSE
 	var/amt = D.get_export_price()
+	D.stockpile_amount -= D.importexport_amt
+	dirty_market_view()
 
-	// You should only export from town stockpiles, not from remote. Remote is meant
-	// To fulfill local economic shortfall and not to make $$ for the steward.
-	if(D.held_items[1] >= D.importexport_amt)
-		D.held_items[1] -= D.importexport_amt
-
-	SStreasury.treasury_value += amt
+	mint(discretionary_fund, amt, "exported [D.name]")
 	SStreasury.total_export += amt
-	SStreasury.log_to_steward("+[amt] exported [D.name]")
+	economic_output += amt
 	record_round_statistic(STATS_STOCKPILE_EXPORTS_VALUE, amt)
-/*	if(D.category) Mint Rework i
-		var/total_crops = 0
-		for(var/farmer in D.farmers)
-			total_crops += D.farmers[farmer]
-		if(total_crops <= 0)
-			return
-		for(var/farmer in D.farmers)
-			var/contributed = D.farmers[farmer]
-			var/percent = (contributed / total_crops)
-			var/cropshare = round(0.35 * (amt * percent))
-			SStreasury.give_money_account(cropshare, farmer, "Cropshare")
-*/
-	if(!silent && amt >= EXPORT_ANNOUNCE_THRESHOLD) //Only announce big spending.
-		scom_announce("Emerald Summit exports [D.name] for [amt] mammon.")
-	D.lower_demand()
 	return amt
 
 /datum/controller/subsystem/treasury/proc/auto_export()
 	var/total_value_exported = 0
+	// Legacy non-trade-good entries: keep the old profitability guard. Trade-good entries
+	// (the bulk of the warehouse) flow through mass_export_surplus() below.
 	for(var/datum/roguestock/D in stockpile_datums)
-		if(!D.importexport_amt)
+		if(!D.importexport_amt || D.trade_good_id)
 			continue
-		if((autoexport_percentage * D.stockpile_limit) >= D.held_items[1])
-			continue // We only auto export if above the auto export percentage.
-		// We don't want to auto export if it is not profitable at all.
+		if((autoexport_percentage * D.stockpile_limit) >= D.stockpile_amount)
+			continue
 		if(D.get_export_price() <= (D.payout_price * D.importexport_amt))
 			continue
-		if(D.held_items[1] >= D.importexport_amt)
-			var/exported = do_export(D, TRUE)
-			total_value_exported += exported
-	if(total_value_exported >= EXPORT_ANNOUNCE_THRESHOLD)
-		scom_announce("Emerald Summit exports [total_value_exported] mammons of surplus goods.")
+		if(D.stockpile_amount >= D.importexport_amt)
+			total_value_exported += do_export(D, TRUE)
+	var/list/surplus_result = mass_export_surplus(silent = TRUE)
+	total_value_exported += surplus_result["revenue"]
+
+/// Walks every auto-priced trade-good stockpile entry and exports stock above the
+/// daily auto-export floor (limit * autoexport_percentage) to its best-paying region,
+/// capped at that region's remaining demand for the day. The Crown's daily sweep
+/// fires this with silent=TRUE; the Steward's "Export Surplus" button fires it with
+/// silent=FALSE for a per-good chat breakdown.
+///
+/// Returns: list("revenue" = total mammon, "units" = total units exported,
+/// "lines" = list of "[qty] [name] -> [region] for [revenue]m" strings).
+/datum/controller/subsystem/treasury/proc/mass_export_surplus(silent = FALSE)
+	var/total_revenue = 0
+	var/total_units = 0
+	var/list/lines = list()
+	for(var/datum/roguestock/D in stockpile_datums)
+		if(!D.trade_good_id)
+			continue
+		if(!D.automatic_price)
+			continue
+		if(!D.importexport_amt)
+			continue
+		var/keep = round(autoexport_percentage * D.stockpile_limit)
+		if(is_auto_import_active(D.trade_good_id))
+			keep = max(keep, AUTO_IMPORT_FLOOR)
+		var/surplus = D.stockpile_amount - keep
+		if(surplus <= 0)
+			continue
+		var/list/best = SSeconomy.get_best_export_region(D.trade_good_id)
+		if(!best || !best["region_id"])
+			continue
+		var/datum/economic_region/region = GLOB.economic_regions[best["region_id"]]
+		if(!region)
+			continue
+		var/remaining_demand = region.demands_today[D.trade_good_id] || 0
+		if(remaining_demand <= 0)
+			continue
+		var/export_qty = min(surplus, remaining_demand)
+		var/revenue = SSeconomy.manual_export(null, region.region_id, D.trade_good_id, export_qty)
+		if(!revenue)
+			continue
+		total_revenue += revenue
+		total_units += export_qty
+		if(!silent)
+			lines += "[export_qty] [D.name] to [region.name] for [revenue]m"
+	return list("revenue" = total_revenue, "units" = total_units, "lines" = lines)

@@ -44,11 +44,16 @@ var/global/feeding_hole_reset_timer
 
 // ripped out of stockpile machine, this deserves a future refactor
 /obj/structure/feedinghole/proc/attemptstockpile(obj/item/I, mob/H, sound = TRUE)
+	// ES deviation: never treat coinage as sellable treasure (the /bounty/treasure datum's
+	// item_type = /obj catch-all would otherwise mint any coin worth >30m)
+	if(istype(I, /obj/item/roguecoin))
+		return
 	for(var/datum/roguestock/R in SStreasury.stockpile_datums)
 		if(istype(I, /obj/item/natural/bundle))
 			var/obj/item/natural/bundle/B = I
 			if(B.stacktype == R.item_type)
-				R.held_items[1] += B.amount
+				R.stockpile_amount += B.amount
+				SStreasury.dirty_market_view()
 				qdel(B)
 				if(sound == TRUE)
 					playsound(loc, 'sound/misc/hiss.ogg', 100, FALSE, -1)
@@ -57,7 +62,8 @@ var/global/feeding_hole_reset_timer
 			if(!R.check_item(I))
 				continue
 			if(!R.mint_item)
-				R.held_items[1] += 1 //stacked logs need to check for multiple
+				R.stockpile_amount += 1 //stacked logs need to check for multiple
+				SStreasury.dirty_market_view()
 				qdel(I)
 				if(sound == TRUE)
 					playsound(loc, 'sound/misc/hiss.ogg', 100, FALSE, -1)

@@ -120,9 +120,11 @@ GLOBAL_VAR(moneymaster)
 							budget -= 1
 		update_icon()
 
-/obj/structure/roguemachine/proc/budget2change(budget, mob/user, specify)
+/obj/structure/roguemachine/proc/budget2change(budget, mob/user, specify, turf/custom_turf)
 	var/turf/T
-	if(!user || (!ismob(user)))
+	if(custom_turf)
+		T = custom_turf
+	else if(!user || (!ismob(user)))
 		T = get_turf(src)
 	else
 		T = get_turf(user)

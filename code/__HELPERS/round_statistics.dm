@@ -73,12 +73,49 @@
 #define STATS_STOCKPILE_IMPORTS_VALUE "stockpile_imports_value"
 #define STATS_STOCKPILE_EXPANSES "stockpile_expanses"
 #define STATS_STOCKPILE_REVENUE "stockpile_revenue"
+#define STATS_STOCKPILE_DIRECT_IMPORTS "stockpile_direct_imports"
+#define STATS_MINTED_TREASURE_GROSS "minted_treasure_gross"
+#define STATS_MINTED_TREASURE_NET "minted_treasure_net"
 #define STATS_PEDDLER_REVENUE "peddler_revenue"
 #define STATS_MAMMONS_HELD "mammons_held"
 #define STATS_MAMMONS_DEPOSITED "mammons_deposited"
 #define STATS_MAMMONS_WITHDRAWN "mammons_withdrawn"
 #define STATS_STARTING_TREASURY "starting_treasury"
 #define STATS_RURAL_TAXES_COLLECTED "rural_taxes_collected" // Lowpop safety
+
+// Economy 3 - Banking / treasury solvency / loans
+#define STATS_ARREARS_DECLARED          "arrears_declared"
+#define STATS_BANKRUPTCY_DECLARED       "bankruptcy_declared"
+#define STATS_TREASURY_DEBT_OUTSTANDING "treasury_debt_outstanding"
+#define STATS_TREASURY_DEBT_REPAID      "treasury_debt_repaid"
+#define STATS_LOANS_ISSUED              "loans_issued"
+#define STATS_LOANS_DEFAULTED           "loans_defaulted"
+#define STATS_REVENUE_CONTRACT_LEVY     "revenue_contract_levy"
+#define STATS_REVENUE_HEADEATER_LEVY    "revenue_headeater_levy"
+#define STATS_REVENUE_IMPORT_TARIFF     "revenue_import_tariff"
+#define STATS_REVENUE_EXPORT_DUTY       "revenue_export_duty"
+#define STATS_EXEMPTED_CONTRACT_LEVY    "exempted_contract_levy"
+#define STATS_EXEMPTED_HEADEATER_LEVY   "exempted_headeater_levy"
+#define STATS_EXEMPTED_IMPORT_TARIFF    "exempted_import_tariff"
+#define STATS_EXEMPTED_EXPORT_DUTY      "exempted_export_duty"
+#define STATS_EXEMPTED_FINE             "exempted_fine"
+#define STATS_PLEDGE_GENERATED          "pledge_generated"
+#define STATS_PLEDGE_CONSUMED          "pledge_consumed"
+
+// Economy 3 - Standing orders / blockades / banditry
+#define STATS_ECON_EVENTS_FIRED         "econ_events_fired"
+#define STATS_ECON_EVENTS_EXPIRED       "econ_events_expired"
+#define STATS_STANDING_ORDER_REVENUE    "standing_order_revenue"
+#define STATS_STANDING_ORDERS_FULFILLED "standing_orders_fulfilled"
+#define STATS_STANDING_ORDERS_EXPIRED  "standing_orders_expired"
+#define STATS_STANDING_ORDERS_PETITIONED "standing_orders_petitioned"
+#define STATS_PETITION_PLEDGE_SPENT    "petition_pledge_spent"
+#define STATS_URGENT_ORDERS_SPAWNED    "urgent_orders_spawned"
+#define STATS_SHORTAGES_ENDED          "shortages_ended"
+#define STATS_BLOCKADES_FIRED          "blockades_fired"
+#define STATS_BLOCKADES_CLEARED        "blockades_cleared"
+#define STATS_BANDITRY_LOSSES          "banditry_losses"
+#define STATS_BANDITRY_DEBT_OUTSTANDING "banditry_debt_outstanding"
 
 // Influence related statistics
 
@@ -304,6 +341,9 @@ GLOBAL_LIST_INIT(scarlet_round_stats, list(
 	STATS_STOCKPILE_IMPORTS_VALUE = 0,
 	STATS_STOCKPILE_EXPANSES = 0,
 	STATS_STOCKPILE_REVENUE = 0,
+	STATS_STOCKPILE_DIRECT_IMPORTS = 0,
+	STATS_MINTED_TREASURE_GROSS = 0,
+	STATS_MINTED_TREASURE_NET = 0,
 	STATS_PEDDLER_REVENUE = 0,
 	STATS_MAMMONS_HELD = 0,
 	STATS_MAMMONS_DEPOSITED = 0,
@@ -325,11 +365,45 @@ GLOBAL_LIST_INIT(scarlet_round_stats, list(
 	STATS_STOCKPILE_IMPORTS_VALUE = 0,
 	STATS_STOCKPILE_EXPANSES = 0,
 	STATS_STOCKPILE_REVENUE = 0,
+	STATS_STOCKPILE_DIRECT_IMPORTS = 0,
+	STATS_MINTED_TREASURE_GROSS = 0,
+	STATS_MINTED_TREASURE_NET = 0,
 	STATS_PEDDLER_REVENUE = 0,
 	STATS_MAMMONS_HELD = 0,
 	STATS_MAMMONS_DEPOSITED = 0,
 	STATS_MAMMONS_WITHDRAWN = 0,
 	STATS_STARTING_TREASURY = 0,
+	STATS_ECON_EVENTS_FIRED = 0,
+	STATS_ECON_EVENTS_EXPIRED = 0,
+	STATS_SHORTAGES_ENDED = 0,
+	STATS_STANDING_ORDER_REVENUE = 0,
+	STATS_STANDING_ORDERS_FULFILLED = 0,
+	STATS_STANDING_ORDERS_EXPIRED = 0,
+	STATS_STANDING_ORDERS_PETITIONED = 0,
+	STATS_PETITION_PLEDGE_SPENT = 0,
+	STATS_URGENT_ORDERS_SPAWNED = 0,
+	STATS_BLOCKADES_FIRED = 0,
+	STATS_BLOCKADES_CLEARED = 0,
+	STATS_BANDITRY_LOSSES = 0,
+	STATS_BANDITRY_DEBT_OUTSTANDING = 0,
+	STATS_ARREARS_DECLARED = 0,
+	STATS_BANKRUPTCY_DECLARED = 0,
+	STATS_TREASURY_DEBT_OUTSTANDING = 0,
+	STATS_TREASURY_DEBT_REPAID = 0,
+	STATS_LOANS_ISSUED = 0,
+	STATS_LOANS_DEFAULTED = 0,
+	STATS_REVENUE_CONTRACT_LEVY = 0,
+	STATS_REVENUE_HEADEATER_LEVY = 0,
+	STATS_REVENUE_IMPORT_TARIFF = 0,
+	STATS_REVENUE_EXPORT_DUTY = 0,
+	STATS_EXEMPTED_CONTRACT_LEVY = 0,
+	STATS_EXEMPTED_HEADEATER_LEVY = 0,
+	STATS_EXEMPTED_IMPORT_TARIFF = 0,
+	STATS_EXEMPTED_EXPORT_DUTY = 0,
+	STATS_EXEMPTED_FINE = 0,
+	STATS_PLEDGE_GENERATED = 0,
+	STATS_PLEDGE_CONSUMED = 0,
+	STATS_RURAL_TAXES_COLLECTED = 0,
 ))
 
 GLOBAL_LIST_EMPTY(patron_follower_counts)
