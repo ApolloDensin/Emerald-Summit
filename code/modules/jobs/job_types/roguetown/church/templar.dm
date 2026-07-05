@@ -598,21 +598,21 @@
 	var/weapons = list("Crossbow","Bow")
 	switch(H.patron?.type)
 		if("Crossbow")
-			beltr = /obj/item/quiver/bolts
-			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
+			H.equip_to_slot_or_del(new /obj/item/quiver/bolts, SLOT_BELT_R, TRUE)
+			H.put_in_hands(new /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow, TRUE)
 		if("Bow") // They can head down to the armory to sideshift into one of the other bows.
-			beltr = /obj/item/quiver/arrows
-			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+			H.equip_to_slot_or_del(new /obj/item/quiver/arrows, SLOT_BELT_R, TRUE)
+			H.put_in_hands(new /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve, TRUE)
 		if(/datum/patron/divine/eora)
 			weapons += list("Harp Bow (long)", "Harp Bow (short)")
 	var/weapon_choice = input(H,"Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 	switch(weapon_choice)
 		if("Harp Bow (long)")
-			beltr = /obj/item/quiver/arrows
-			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora
+			H.equip_to_slot_or_del(new /obj/item/quiver/arrows, SLOT_BELT_R, TRUE)
+			H.put_in_hands(new /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora(H), TRUE)
 		if("Harp Bow (short)")
-			beltr = /obj/item/quiver/arrows
-			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora
+			H.equip_to_slot_or_del(new /obj/item/quiver/arrows, SLOT_BELT_R, TRUE)
+			H.put_in_hands(new /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora(H), TRUE)
 	// -- Start of section for god specific bonuses --
 	if(H.patron?.type == /datum/patron/divine/astrata)
 		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
