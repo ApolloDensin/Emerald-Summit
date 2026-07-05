@@ -277,7 +277,7 @@
 	beltl = /obj/item/storage/keyring/churchie
 	backl = /obj/item/storage/backpack/rogue/satchel
 	backr = /obj/item/rogueweapon/woodstaff/implement_magi2/greater
-	backpack_contents = list(/obj/item/ritechalk, /obj/item/reagent_containers/glass/bottle/rogue/manapot = 1, /obj/item/spellbook_unfinished/pre_arcyne = 1,)
+	backpack_contents = list(/obj/item/ritechalk, /obj/item/reagent_containers/glass/bottle/rogue/manapot = 1, /obj/item/book/magi2_grimoire = 1,)
 	switch(H.patron?.type)
 		if(/datum/patron/divine/noc)
 			head = /obj/item/clothing/head/roguetown/nochood
