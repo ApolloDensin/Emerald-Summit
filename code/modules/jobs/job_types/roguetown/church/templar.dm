@@ -596,8 +596,7 @@
 /datum/outfit/job/templar/tempest/choose_loadout(mob/living/carbon/human/H)
 	. = ..()
 	var/weapons = list("Crossbow","Bow")
-	var/weapon_choice = input(H,"Choose your weapon.", "TAKE UP ARMS") as anything in weapons
-	switch(weapon_choice)
+	switch(H.patron?.type)
 		if("Crossbow")
 			beltr = /obj/item/quiver/bolts
 			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
