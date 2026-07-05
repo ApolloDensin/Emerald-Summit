@@ -1,4 +1,5 @@
 /datum/job/roguetown/monk
+	
 	title = "Acolyte"
 	flag = MONK
 	department_flag = CHURCHMEN
@@ -31,7 +32,8 @@
 	job_traits = list(TRAIT_RITUALIST, TRAIT_GRAVEROBBER, TRAIT_CLERGY)
 	advclass_cat_rolls = list(CTAG_ACOLYTE = 2)
 	job_subclasses = list(
-		/datum/advclass/acolyte
+		/datum/advclass/acolyte,
+		/datum/advclass/acolyte/nocA,
 	)
 
 /datum/job/roguetown/monk/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
@@ -227,3 +229,79 @@
 		H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
 		H.adjust_skillrank(/datum/skill/misc/lockpicking, 1, TRUE)
 		H.adjust_skillrank(/datum/skill/misc/music, 2, TRUE)
+
+/datum/advclass/acolyte/nocA
+	name = "AMystic Theurge"
+	tutorial = "For most in the church, studying the mysticism of the divine is a lifelong pursuit. For you, the call of Noc has brought you to his domain of magic. You are a mystic, a theurge, and a student of the arcane. Your studies will be difficult, but your faith in Noc will guide you to mastery of the arcane arts."
+	outfit = /datum/outfit/job/monk/nocA
+	category_tags = list(CTAG_ACOLYTE)
+	cmode_music = 'sound/music/combat_holy.ogg'
+	allowed_patrons = list(/datum/patron/divine/noc)
+
+	subclass_stats = list(
+		STATKEY_INT = 3,
+		STATKEY_END = 2,
+		STATKEY_SPD = 1
+	)
+	
+	traits_applied = list(TRAIT_ARCYNE_T3)
+	subclass_spellpoints = 0
+	mage_aspect_config = list("major" = 1, "minor" = 2, "utilities" = 6, "ward" = TRUE)
+
+	subclass_skills = list(
+		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/medicine = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/reading = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/craft/cooking = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/craft/crafting = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/sewing = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/labor/farming = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/magic/arcane = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/magic/holy = SKILL_LEVEL_MASTER,
+	)
+
+/datum/outfit/job/monk
+	name = "AMystic Theurge"
+	jobtype = /datum/job/roguetown/monk
+	job_bitflag = BITFLAG_CHURCH
+	allowed_patrons = list(/datum/patron/divine/noc)
+
+	has_loadout = TRUE
+
+/datum/outfit/job/monk/nocA/pre_equip(mob/living/carbon/human/H)
+	..()
+	H.adjust_blindness(-3)
+	if(H.patron.parentpatron)
+		H.patron = new H.patron.parentpatron
+	belt = /obj/item/storage/belt/rogue/leather/rope
+	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
+	beltl = /obj/item/storage/keyring/churchie
+	backl = /obj/item/storage/backpack/rogue/satchel
+	backr = /obj/item/rogueweapon/woodstaff
+	backpack_contents = list(/obj/item/ritechalk, /obj/item/rogueweapon/surgery/hammer)
+	switch(H.patron?.type)
+		if(/datum/patron/divine/noc)
+			head = /obj/item/clothing/head/roguetown/nochood
+			neck = /obj/item/clothing/neck/roguetown/psicross/noc
+			wrists = /obj/item/clothing/wrists/roguetown/nocwrappings
+			shoes = /obj/item/clothing/shoes/roguetown/sandals
+			armor = /obj/item/clothing/suit/roguetown/shirt/robe/noc
+			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/black
+	// -- End of section for god specific bonuses --
+	var/datum/devotion/C = new /datum/devotion(H, H.patron)
+	C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = CLERIC_REGEN_MINOR, devotion_limit = CLERIC_REQ_2)
+	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/divineblast)
+
+/datum/outfit/job/monk/nocA/choose_loadout(mob/living/carbon/human/H)
+	. = ..()
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
+	// -- Start of section for god specific bonuses --
+	if(H.patron?.type == /datum/patron/divine/noc) // Arcyne and Knowledge - Probably good at reading and the other arcyne adjacent stuff.
+		H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE) // Really good at reading... does this really do anything? No. BUT it's soulful.
+		H.adjust_skillrank(/datum/skill/craft/alchemy, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/magic/arcane, 2, TRUE) // for their arcane spells, very little CDR and cast speed.
+		ADD_TRAIT(H, TRAIT_TALENTED_ALCHEMIST, TRAIT_GENERIC)
