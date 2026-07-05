@@ -504,8 +504,8 @@
 	
 	subclass_skills = list(
 		/datum/skill/combat/knives = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/crossbows = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/bows = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/crossbows = SKILL_LEVEL_EXPERT,
+		/datum/skill/combat/bows = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN,
@@ -604,6 +604,22 @@
 		if("Bow") // They can head down to the armory to sideshift into one of the other bows.
 			beltr = /obj/item/quiver/arrows
 			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+		if(/datum/patron/divine/eora)
+			weapons += list("Harp Bow (long)", "Harp Bow (short)")
+	var/weapon_choice = input(H,"Choose your weapon.", "TAKE UP ARMS") as anything in weapons
+	switch(weapon_choice)
+		if("Crossbow")
+			beltr = /obj/item/quiver/bolts
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
+		if("Bow") // They can head down to the armory to sideshift into one of the other bows.
+			beltr = /obj/item/quiver/arrows
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+		if("Harp Bow (long)")
+			beltr = /obj/item/quiver/arrows
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora(H)
+		if("Harp Bow (short)")
+			beltr = /obj/item/quiver/arrows
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora(H)
 	// -- Start of section for god specific bonuses --
 	if(H.patron?.type == /datum/patron/divine/astrata)
 		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
