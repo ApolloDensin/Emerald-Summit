@@ -82,7 +82,7 @@
 	backl = /obj/item/rogueweapon/shield/tower/metal
 	backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/flashlight/flare/torch = 1)
 	
-	/datum/advclass/mercenary/Fusilier
+/datum/advclass/mercenary/Fusilier
 	name = "Otavan Fusilier"
 	tutorial = "The Fusilier are an Otavan mercenary armed with a Fusil, combining the skills of a soldier and duelist they are trained to fight in the field and in duels, they are a versatile mercenary class that can adapt to any situation."
 	allowed_sexes = list(MALE, FEMALE)
@@ -97,7 +97,7 @@
 		/datum/language/otavan,
 	)
 
-	traits_applied = list(TRAIT_FUSILIER)
+	traits_applied = list(TRAIT_FUSILIER, TRAIT_DODGEEXPERT)
 	subclass_stats = list(
 		STATKEY_SPD = 3,// +1 spd so they can use their missing DE a little better
 		STATKEY_PER = 2,
@@ -109,14 +109,10 @@
 		/datum/skill/misc/swimming = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/climbing = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/maces = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/crossbows = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/swords = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/shields = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/whipsflails = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/swords = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/firearms = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/knives = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
 		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
@@ -131,35 +127,17 @@
 
 	// CLASS ARCHETYPES
 	H.adjust_blindness(-3)
-	var/classes = list("Swordsman","Macebearer","Flailman", "Foot Lancer")
-	var/classchoice = input(H, "Choose your archetypes", "Available archetypes") as anything in classes
-	H.set_blindness(0)
-	to_chat(H, span_warning("You are a Knight of Otava, well experienced in the use of your chosen arms."))
-
-	switch(classchoice)
-		if("Swordsman")
-			H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-			beltl = /obj/item/rogueweapon/sword/falchion
-			l_hand = /obj/item/rogueweapon/scabbard/sword
-		if("Macebearer")
-			H.adjust_skillrank_up_to(/datum/skill/combat/maces, 4, TRUE)
-			beltl = /obj/item/rogueweapon/mace/steel/morningstar
-		if("Flailman")
-			H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 4, TRUE)
-			beltl = /obj/item/rogueweapon/flail/sflail
-		if("Foot Lancer")
-			H.adjust_skillrank_up_to(/datum/skill/combat/polearms, 4, TRUE)
-			r_hand = /obj/item/rogueweapon/spear/lance
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	belt = /obj/item/storage/belt/rogue/leather
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
+	beltr = /obj/item/rogueweapon/sword/rapier
+	beltl = /obj/item/quiver/bullet/lead
 	neck = /obj/item/clothing/neck/roguetown/fencerguard
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/otavan
-	head = /obj/item/clothing/head/roguetown/helmet/otavan
-	armor = /obj/item/clothing/suit/roguetown/armor/plate/otavan
+	head = /obj/item/clothing/head/roguetown/helmet/tricorn
+	armor = /obj/item/clothing/suit/roguetown/armor/plate/half/fencer
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
 	shoes = /obj/item/clothing/shoes/roguetown/boots/otavan
 	gloves = /obj/item/clothing/gloves/roguetown/otavan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backl = /obj/item/rogueweapon/shield/tower/metal
-	backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/flashlight/flare/torch = 1)
+	backl = /obj/item/gun/ballistic/firearm/flintgonne/fusil
+	backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/flashlight/flare/torch = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/powderflask = 1)
