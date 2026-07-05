@@ -231,7 +231,7 @@
 		H.adjust_skillrank(/datum/skill/misc/music, 2, TRUE)
 
 /datum/advclass/acolyte/nocA
-	name = "AMystic Theurge"
+	name = "Mystic Theurge"
 	tutorial = "For most in the church, studying the mysticism of the divine is a lifelong pursuit. For you, the call of Noc has brought you to his domain of magic. You are a mystic, a theurge, and a student of the arcane. Your studies will be difficult, but your faith in Noc will guide you to mastery of the arcane arts."
 	outfit = /datum/outfit/job/monk/nocA
 	category_tags = list(CTAG_ACOLYTE)
