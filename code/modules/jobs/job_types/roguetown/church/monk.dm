@@ -249,10 +249,10 @@
 	mage_aspect_config = list("major" = 1, "minor" = 2, "utilities" = 6, "ward" = TRUE)
 
 	subclass_skills = list(
-		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/medicine = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/medicine = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/reading = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/cooking = SKILL_LEVEL_APPRENTICE,
@@ -260,7 +260,7 @@
 		/datum/skill/misc/sewing = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/labor/farming = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/magic/arcane = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/magic/holy = SKILL_LEVEL_MASTER,
+		/datum/skill/magic/holy = SKILL_LEVEL_APPRRENTICE,
 	)
 
 /datum/outfit/job/monk
@@ -280,8 +280,8 @@
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	beltl = /obj/item/storage/keyring/churchie
 	backl = /obj/item/storage/backpack/rogue/satchel
-	backr = /obj/item/rogueweapon/woodstaff
-	backpack_contents = list(/obj/item/ritechalk, /obj/item/rogueweapon/surgery/hammer)
+	backr = /obj/item/rogueweapon/woodstaff/implement_magi2/greater
+	backpack_contents = list(/obj/item/ritechalk, /obj/item/reagent_containers/glass/bottle/rogue/manapot = 1, /obj/item/spellbook_unfinished/pre_arcyne = 1,)
 	switch(H.patron?.type)
 		if(/datum/patron/divine/noc)
 			head = /obj/item/clothing/head/roguetown/nochood
@@ -293,7 +293,6 @@
 	// -- End of section for god specific bonuses --
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
 	C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = CLERIC_REGEN_MINOR, devotion_limit = CLERIC_REQ_2)
-	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/divineblast)
 
 /datum/outfit/job/monk/nocA/choose_loadout(mob/living/carbon/human/H)
 	. = ..()
