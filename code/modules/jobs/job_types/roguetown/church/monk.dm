@@ -33,7 +33,7 @@
 	advclass_cat_rolls = list(CTAG_ACOLYTE = 2)
 	job_subclasses = list(
 		/datum/advclass/acolyte,
-		/datum/advclass/acolyte/nocA,
+		/datum/advclass/nocA,
 	)
 
 /datum/job/roguetown/monk/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
@@ -230,10 +230,10 @@
 		H.adjust_skillrank(/datum/skill/misc/lockpicking, 1, TRUE)
 		H.adjust_skillrank(/datum/skill/misc/music, 2, TRUE)
 
-/datum/advclass/acolyte/nocA
+/datum/advclass/nocA
 	name = "Mystic Theurge"
 	tutorial = "For most in the church, studying the mysticism of the divine is a lifelong pursuit. For you, the call of Noc has brought you to his domain of magic. You are a mystic, a theurge, and a student of the arcane. Your studies will be difficult, but your faith in Noc will guide you to mastery of the arcane arts."
-	outfit = /datum/outfit/job/monk/nocA
+	outfit = /datum/outfit/job/nocA
 	category_tags = list(CTAG_ACOLYTE)
 	cmode_music = 'sound/music/combat_holy.ogg'
 	allowed_patrons = list(/datum/patron/divine/noc)
@@ -263,15 +263,15 @@
 		/datum/skill/magic/holy = SKILL_LEVEL_APPRENTICE,
 	)
 
-/datum/outfit/job/monk
+/datum/outfit/job/nocA
 	name = "AMystic Theurge"
-	jobtype = /datum/job/roguetown/monk
+	jobtype = /datum/job/roguetown/nocA
 	job_bitflag = BITFLAG_CHURCH
 	allowed_patrons = list(/datum/patron/divine/noc)
 
 	has_loadout = TRUE
 
-/datum/outfit/job/monk/nocA/pre_equip(mob/living/carbon/human/H)
+/datum/outfit/job/nocA/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.adjust_blindness(-3)
 	if(H.patron.parentpatron)
@@ -294,7 +294,7 @@
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
 	C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_MINOR, devotion_limit = CLERIC_REQ_1)
 
-/datum/outfit/job/monk/nocA/choose_loadout(mob/living/carbon/human/H)
+/datum/outfit/job/nocA/choose_loadout(mob/living/carbon/human/H)
 	. = ..()
 	if(H.age == AGE_OLD)
 		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
