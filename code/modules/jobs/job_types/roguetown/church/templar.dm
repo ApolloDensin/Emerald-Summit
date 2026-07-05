@@ -488,7 +488,7 @@
 		H.adjust_skillrank(/datum/skill/misc/music, 1, TRUE)
 	// -- End of section for god specific bonuses --
 
-	/datum/advclass/templar/tempest
+/datum/advclass/templar/tempest
 	name = "Tempest"
 	tutorial = "You are a templar of the Church, trained in ranged combat to bring a Tempest of holy wrath upon your enemies."
 	outfit = /datum/outfit/job/templar/tempest
@@ -599,20 +599,20 @@
 	switch(H.patron?.type)
 		if("Crossbow")
 			beltr = /obj/item/quiver/bolts
-			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
+			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 		if("Bow") // They can head down to the armory to sideshift into one of the other bows.
 			beltr = /obj/item/quiver/arrows
-			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
 		if(/datum/patron/divine/eora)
 			weapons += list("Harp Bow (long)", "Harp Bow (short)")
 	var/weapon_choice = input(H,"Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 	switch(weapon_choice)
 		if("Harp Bow (long)")
 			beltr = /obj/item/quiver/arrows
-			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora
+			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora
 		if("Harp Bow (short)")
 			beltr = /obj/item/quiver/arrows
-			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora
+			backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora
 	// -- Start of section for god specific bonuses --
 	if(H.patron?.type == /datum/patron/divine/astrata)
 		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
