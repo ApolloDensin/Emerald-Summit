@@ -265,7 +265,7 @@
 
 /datum/outfit/job/nocA
 	name = "AMystic Theurge"
-	jobtype = /datum/job/roguetown/nocA
+	jobtype = /datum/job/roguetown/monk
 	job_bitflag = BITFLAG_CHURCH
 	allowed_patrons = list(/datum/patron/divine/noc)
 
