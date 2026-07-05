@@ -616,10 +616,10 @@
 			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
 		if("Harp Bow (long)")
 			beltr = /obj/item/quiver/arrows
-			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora(H)
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/eora
 		if("Harp Bow (short)")
 			beltr = /obj/item/quiver/arrows
-			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora(H)
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/eora
 	// -- Start of section for god specific bonuses --
 	if(H.patron?.type == /datum/patron/divine/astrata)
 		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
