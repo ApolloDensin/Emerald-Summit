@@ -265,11 +265,7 @@
 
 /datum/outfit/job/nocA
 	name = "Mystic Theurge"
-	jobtype = /datum/job/roguetown/monk
-	job_bitflag = BITFLAG_CHURCH
 	allowed_patrons = list(/datum/patron/divine/noc)
-
-	has_loadout = TRUE
 
 /datum/outfit/job/nocA/pre_equip(mob/living/carbon/human/H)
 	..()
