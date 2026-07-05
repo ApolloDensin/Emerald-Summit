@@ -299,6 +299,7 @@
 	. = ..()
 	if(H.age == AGE_OLD)
 		H.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/magic/arcane, 1, TRUE)
 	// -- Start of section for god specific bonuses --
 	if(H.patron?.type == /datum/patron/divine/noc) // Arcyne and Knowledge - Probably good at reading and the other arcyne adjacent stuff.
 		H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE) // Really good at reading... does this really do anything? No. BUT it's soulful.
