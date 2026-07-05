@@ -245,6 +245,7 @@
 	)
 	
 	traits_applied = list(TRAIT_ARCYNE_T3, TRAIT_TALENTED_ALCHEMIST, TRAIT_GENERIC)
+	maximum_possible_slots = 1 // Need to keep it 1 for now. May increase to 2 slots but balance
 	subclass_spellpoints = 0
 	mage_aspect_config = list("major" = 1, "minor" = 2, "utilities" = 6, "ward" = TRUE)
 
