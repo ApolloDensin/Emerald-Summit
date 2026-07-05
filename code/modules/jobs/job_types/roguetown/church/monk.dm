@@ -270,6 +270,7 @@
 /datum/outfit/job/nocA/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.adjust_blindness(-3)
+	H.mind.assigned_role = "Mystic Theurge"
 	if(H.patron.parentpatron)
 		H.patron = new H.patron.parentpatron
 	belt = /obj/item/storage/belt/rogue/leather/rope
