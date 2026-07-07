@@ -7,7 +7,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
-#include "_maps\_basemap.dm"
+#include "_maps\roguetest.dm"
 #include "_maps\map_files\generic\CentCom.dmm"
 #include "_maps\templates\arcyne_fortress.dm"
 #include "_maps\templates\bog_shack_small.dm"
@@ -2817,10 +2817,10 @@
 #include "modular_azurepeak\code\modules\spells\magi2\spells\aegiscraft\_aspect.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\aegiscraft\conjure_aegis.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\arcyne_ward\_autowardry_aspect.dm"
+#include "modular_azurepeak\code\modules\spells\magi2\spells\arcyne_ward\bathyhide.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\arcyne_ward\conjure.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\arcyne_ward\crystalhide.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\arcyne_ward\dragonhide.dm"
-#include "modular_azurepeak\code\modules\spells\magi2\spells\arcyne_ward\bathyhide.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\artifice\_aspect.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\augmentation\_aspect.dm"
 #include "modular_azurepeak\code\modules\spells\magi2\spells\augmentation\ascension.dm"
