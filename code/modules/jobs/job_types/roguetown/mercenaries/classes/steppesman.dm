@@ -234,15 +234,14 @@
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/chargah
 	backr = /obj/item/gun/ballistic/firearm/flintgonne
-	backl = /obj/item/rogueweapon/halberd/bardiche
+	l_hand = /obj/item/rogueweapon/halberd/bardiche
 	armor = /obj/item/clothing/suit/roguetown/armor/plate/scale/steppe
 	cloak = /obj/item/clothing/cloak/raincloak/furcloak
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	beltr = /obj/item/quiver/bullet/lead
-	beltl = /obj/item/storage/backpack/rogue/satchel/short
+	backl = /obj/item/storage/backpack/rogue/satchel/short
 	backpack_contents = list(
 		/obj/item/roguekey/mercenary,
-		/obj/item/flashlight/flare/torch,
 		/obj/item/storage/belt/rogue/pouch/coins/poor,
 		/obj/item/rogueweapon/whip/nagaika,
 		/obj/item/powderflask = 1
