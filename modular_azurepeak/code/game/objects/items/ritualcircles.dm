@@ -311,6 +311,7 @@
 	name = "Rune of Justice"
 	icon_state = "ravox_chalky" // mortosasye sprite
 	desc = "A Holy Rune of Ravox. A blade to protect the weak with." // whiteknight the god. bruh
+	var/ravoxrites = input(user, "Rituals of Justice")
 
 /obj/structure/ritualcircle/ravox/attack_hand(mob/living/user)
 	if(!..())
@@ -324,9 +325,8 @@
 	if(HAS_TRAIT(user, TRAIT_RITES_BLOCKED))
 		to_chat(user,span_warning("I have performed enough rituals for the day... I must rest before communing more."))
 		return
-	var/ravoxrites = input(user, "Rituals of Justice")
 	
-	if(riteselection != "Rituals of Justice")
+	var/riteselection = input(user(riteselection != "Rituals of Justice", src) as null
 		return // Ideally stick to this style for rites. Early returns + negatives. Minimises the "pyramid" shape you can see in Astrata, which I've left untouched for now -- CODEATHON
 			
 	if(!do_after(user, 5 SECONDS))
