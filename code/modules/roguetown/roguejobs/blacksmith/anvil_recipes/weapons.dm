@@ -1279,7 +1279,7 @@
 	additional_items = list(/obj/item/rogueweapon/scabbard/sheath)
 	created_item = /obj/item/rogueweapon/scabbard/sheath/noble
 
-	/datum/anvil_recipe/weapons/decorated/scabbard
+/datum/anvil_recipe/weapons/decorated/scabbard
 	name = "Scabbard, Gold-Decorated (+1 Sword's Scabbard)"
 	req_bar = /obj/item/ingot/gold
 	additional_items = list(/obj/item/rogueweapon/scabbard/sword)
