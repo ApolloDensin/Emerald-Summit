@@ -862,6 +862,11 @@
 	is_silver = TRUE
 	smeltresult = /obj/item/ingot/silver
 
+/obj/item/rogueweapon/halberd/pestran
+	name = "Lance of Boils"
+	desc = "For when a scalpel is too short, and you still need to perform Pestra's holy work."
+	icon_state = "pestranhalberd"
+
 /obj/item/rogueweapon/halberd/psyhalberd/ComponentInitialize()
 	AddComponent(\
 		/datum/component/silverbless,\
@@ -1073,6 +1078,16 @@
 	max_blade_int = 240
 	force = 14
 	force_wielded = 35
+
+/obj/item/rogueweapon/greatsword/grenz/ravox
+	name = "Censure"
+	desc = "A blade that invites imagery of hope. Of men clad in shattered plate and bearing blackened pauldrons, \
+	standing at His side. To correct Her wrongs, as they sought the censure of divine tyranny. \
+	<small>Even now, it smells of ash.</small>"
+	icon_state = "ravoxflamberge"
+	max_integrity = 240
+	max_blade_int = 240
+	wdefense = 7//You are truly unique, m'lord.
 
 /obj/item/rogueweapon/greatsword/miaodao
 	name = "steel miaodao"
