@@ -32,8 +32,10 @@
 		H.set_species(/datum/species/gnoll)
 		H.skin_armor = new /obj/item/clothing/suit/roguetown/armor/regenerating/skin/gnoll_armor/templar(H)
 		neck = /obj/item/storage/belt/rogue/pouch
-		var/obj/item/needle/templar_needle = new /obj/item/needle(H.loc)
-		H.put_in_r_hand(templar_needle)
+		neck_contents = list(
+			/obj/item/needle = 1,
+			/obj/item/ritechalk,
+		)
 		don_pelt(H)
 		var/datum/devotion/C = new /datum/devotion(H, H.patron)
 		C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = CLERIC_REGEN_MINOR, start_maxed = FALSE)
