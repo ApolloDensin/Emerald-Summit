@@ -267,7 +267,7 @@
 		/datum/skill/misc/medicine = SKILL_LEVEL_NOVICE,
 		/datum/skill/combat/shields = SKILL_LEVEL_JOURNEYMAN,	//May tone down to 2; seems OK.
 	)
-	extra_context = "This subclass gains Expert skill in their weapon of choice."
+	extra_context = "This subclass gains Expert skill in their weapon of choice. Most weapons only affect skill, but Eora templars who pick a <b>Harp Bow (long or short)</b> become archers instead: Speed: <b><font color='#91cf68'>I</font></b>, Perception: <b><font color='#91cf68'>II</font></b>, Strength: <b><font color='#cf2a2a'>-I</font></b>, Endurance: <b><font color='#cf2a2a'>-I</font></b>, Constitution: <b><font color='#cf2a2a'>-I</font></b> (with a cuirass in place of heavy plate)."
 
 /datum/outfit/job/templar/crusader/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -334,7 +334,7 @@
 	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
 	belt = /obj/item/storage/belt/rogue/leather/black
 	beltr = /obj/item/storage/keyring/churchie
-	beltl = /obj/item/rogueweapon/scabbard/sword
+	// scabbard is granted in choose_loadout once the weapon is picked, so archer loadouts can use SLOT_BELT_L for a quiver instead
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
 	armor = /obj/item/clothing/suit/roguetown/armor/plate	///Half-Plate not fullplate
 	backpack_contents = list(
