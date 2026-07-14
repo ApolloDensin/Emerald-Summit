@@ -1,5 +1,5 @@
 /obj/effect/proc_holder/spell/self/divine_strike
-	name = "Holy"
+	name = "Holy Strike"
 	desc = "Enhance your held weapon to deal additional damage. Undead take additional damage. Each god enhances it differently"
 	overlay = "createlight"
 	recharge_time = 1 MINUTES
