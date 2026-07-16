@@ -22,7 +22,7 @@
 	backl = /obj/item/rogueweapon/woodstaff
 
 
-	traits_applied = list(TRAIT_PEASANTMILITIA)
+	job_traits = list(TRAIT_PEASANTMILITIA)
 	subclass_stats = list(
 		STATKEY_STR = 2,
 		STATKEY_CON = 2,
