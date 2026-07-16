@@ -116,6 +116,7 @@
 #define BOGGUARD	(1<<5)
 #define SERGEANT	(1<<6)
 #define SHERIFF		(1<<7)
+#define CHIEFWARDEN	(1<<8)
 
 #define CHURCHMEN		(1<<2)
 
@@ -260,27 +261,28 @@
 #define JDO_TOWNGUARD 8.6
 #define JDO_DUNGEONEER 8.7
 #define JDO_BOGGUARD 9
+#define JDO_CHIEFWARDEN 10
 
-#define JDO_PRIEST 10
-#define JDO_MARTYR 11
-#define JDO_TEMPLAR 12
-#define JDO_MONK 13
-#define JDO_DRUID 13.1
-#define JDO_CHURCHLING 14
-#define JDO_KEEPER 14.1
-#define JDO_GRAVEMAN 15
+#define JDO_PRIEST 11
+#define JDO_MARTYR 12
+#define JDO_TEMPLAR 13
+#define JDO_MONK 14
+#define JDO_DRUID 14.1
+#define JDO_CHURCHLING 15
+#define JDO_KEEPER 15.1
+#define JDO_GRAVEMAN 16
 
-#define JDO_MERCHANT 17
-#define JDO_SHOPHAND 17.1
-#define JDO_GRABBER 17.2
+#define JDO_MERCHANT 18
+#define JDO_SHOPHAND 18.1
+#define JDO_GRABBER 18.2
 
-#define JDO_CHIEF 18.1
-#define JDO_LOUDMOUTH 18.2
-#define JDO_ARCHIVIST 18.3
+#define JDO_CHIEF 19.1
+#define JDO_LOUDMOUTH 19.2
+#define JDO_ARCHIVIST 19.3
 
-#define JDO_GUILDMASTER 19.1
-#define JDO_GUILDSMAN 19.2
-#define JDO_TAILOR 19.3
+#define JDO_GUILDMASTER 20.1
+#define JDO_GUILDSMAN 20.2
+#define JDO_TAILOR 20.3
 
 #define JDO_BARKEEP 26
 #define JDO_COOK 27
@@ -407,7 +409,8 @@
 	/datum/job/roguetown/manorguard,\
 	/datum/job/roguetown/sheriff,\
 	/datum/job/roguetown/squire,\
-	/datum/job/roguetown/guardsman
+	/datum/job/roguetown/guardsman,\
+	/datum/job/roguetown/chiefwarden
 
 #define INQUISITION_ROLES \
 	/datum/job/roguetown/puritan,\
