@@ -1,11 +1,11 @@
 /datum/advclass/levy
 	
-	title = "Levy"
+	name = "Levy"
 	tutorial = "Most crime in the City does not require a trained man at arms. Instead, a small group of townspeople help the Elder maintain order inside the city. You are one such member, subdue those who cause issue to bring them to the Elder for a scolding."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/levy
-	category_tags = list(CTAG_PILGRIM, CTAG_TOWNER)
+
 	subclass_social_rank = SOCIAL_RANK_YEOMAN
 	maximum_possible_slots = 3
 
@@ -22,13 +22,12 @@
 	backl = /obj/item/rogueweapon/woodstaff
 
 
-	traits_applied = list(TRAIT_GENERIC)
+	traits_applied = list(TRAIT_PEASANTMILITIA)
 	subclass_stats = list(
 		STATKEY_STR = 2,
-		STATKEY_END = 1,
-		STATKEY_CON = 3,
-		STATKEY_SPD = 1,
-		STATKEY_INT = 1
+		STATKEY_CON = 2,
+		STATKEY_LCK = 2,
+		STATKEY_END = 1
 	)
 
 	subclass_skills = list(
@@ -36,7 +35,7 @@
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/knives = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/polearms = SKILL_EXP_JOURNEYMAN,
-		/datum/skill/combat/slings = SKILL_EXP_JOURNEYMAN
+		/datum/skill/combat/slings = SKILL_EXP_JOURNEYMAN,
 		/datum/skill/craft/cooking = SKILL_LEVEL_NOVICE,
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/swimming = SKILL_LEVEL_JOURNEYMAN,
