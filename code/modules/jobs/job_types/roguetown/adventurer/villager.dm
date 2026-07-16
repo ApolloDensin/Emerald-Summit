@@ -50,7 +50,8 @@
 		/datum/advclass/masterblacksmith,
 		/datum/advclass/minermaster,
 		/datum/advclass/fishermaster,
-		/datum/advclass/farmermaster
+		/datum/advclass/farmermaster,
+		/datum/advclass/levy
 	) //Master carpenter and mason aren't rolling for some reasons, so they are not present at the time of writing.
 /*
 /datum/job/roguetown/adventurer/villager/New()

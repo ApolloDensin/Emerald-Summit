@@ -1,0 +1,50 @@
+/datum/advclass/levy
+	
+	title = "Levy"
+	tutorial = "Most crime in the City does not require a trained man at arms. Instead, a small group of townspeople help the Elder maintain order inside the city. You are one such member, subdue those who cause issue to bring them to the Elder for a scolding."
+	allowed_sexes = list(MALE, FEMALE)
+	allowed_races = RACES_ALL_KINDS
+	outfit = /datum/outfit/job/levy
+	category_tags = list(CTAG_PILGRIM, CTAG_TOWNER)
+	subclass_social_rank = SOCIAL_RANK_YEOMAN
+	maximum_possible_slots = 3
+
+/datum/outfit/job/levy
+	belt = /obj/item/storage/belt/rogue/leather
+	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/lord
+	pants = /obj/item/clothing/under/roguetown/tights/random
+	shoes = /obj/item/clothing/shoes/roguetown/shortboots
+	backr = /obj/item/storage/backpack/rogue/satchel
+	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
+	armor = /obj/item/clothing/suit/roguetown/armor/leather
+	backl = /obj/item/rogueweapon/woodstaff
+
+
+	traits_applied = list(TRAIT_GENERIC)
+	subclass_stats = list(
+		STATKEY_STR = 2,
+		STATKEY_END = 1,
+		STATKEY_CON = 3,
+		STATKEY_SPD = 1,
+		STATKEY_INT = 1
+	)
+
+	subclass_skills = list(
+		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/knives = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/polearms = SKILL_EXP_JOURNEYMAN,
+		/datum/skill/combat/slings = SKILL_EXP_JOURNEYMAN
+		/datum/skill/craft/cooking = SKILL_LEVEL_NOVICE,
+		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
+		/datum/skill/misc/swimming = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN, 
+		/datum/skill/labor/mining = SKILL_LEVEL_NOVICE,
+		/datum/skill/labor/lumberjacking = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/labor/farming = SKILL_LEVEL_NOVICE,
+		/datum/skill/labor/fishing = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/stealing = SKILL_LEVEL_JOURNEYMAN,
+	)
