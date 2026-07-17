@@ -8,22 +8,8 @@
 
 	subclass_social_rank = SOCIAL_RANK_YEOMAN
 	maximum_possible_slots = 3
-
-/datum/outfit/job/levy
-	belt = /obj/item/storage/belt/rogue/leather
-	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/lord
-	pants = /obj/item/clothing/under/roguetown/tights/random
-	shoes = /obj/item/clothing/shoes/roguetown/shortboots
-	backr = /obj/item/storage/backpack/rogue/satchel
-	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
-	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
-	armor = /obj/item/clothing/suit/roguetown/armor/leather
-	backl = /obj/item/rogueweapon/woodstaff
-
-
 	job_traits = list(TRAIT_PEASANTMILITIA)
-	subclass_stats = list(
+	subclass_stats = list(		
 		STATKEY_STR = 2,
 		STATKEY_CON = 2,
 		STATKEY_LCK = 2,
@@ -47,3 +33,14 @@
 		/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/stealing = SKILL_LEVEL_JOURNEYMAN,
 	)
+/datum/outfit/job/levy
+	belt = /obj/item/storage/belt/rogue/leather
+	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/lord
+	pants = /obj/item/clothing/under/roguetown/tights/random
+	shoes = /obj/item/clothing/shoes/roguetown/shortboots
+	backr = /obj/item/storage/backpack/rogue/satchel
+	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
+	armor = /obj/item/clothing/suit/roguetown/armor/leather
+	backl = /obj/item/rogueweapon/woodstaff
