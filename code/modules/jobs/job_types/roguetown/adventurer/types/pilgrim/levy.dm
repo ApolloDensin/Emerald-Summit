@@ -8,7 +8,7 @@
 
 	subclass_social_rank = SOCIAL_RANK_YEOMAN
 	maximum_possible_slots = 3
-	job_traits = list(TRAIT_PEASANTMILITIA)
+	traits_applied = list(TRAIT_PEASANTMILITIA)
 	subclass_stats = list(		
 		STATKEY_STR = 2,
 		STATKEY_CON = 2,
