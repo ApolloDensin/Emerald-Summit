@@ -5,8 +5,9 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/levy
+	category_tags = list(CTAG_TOWNER)
 
-	subclass_social_rank = SOCIAL_RANK_YEOMAN
+	subclass_social_rank = SOCIAL_RANK_PEASANT
 	maximum_possible_slots = 3
 	traits_applied = list(TRAIT_PEASANTMILITIA)
 	subclass_stats = list(		
@@ -20,8 +21,8 @@
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/knives = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/polearms = SKILL_EXP_JOURNEYMAN,
-		/datum/skill/combat/slings = SKILL_EXP_JOURNEYMAN,
+		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/slings = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/cooking = SKILL_LEVEL_NOVICE,
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/swimming = SKILL_LEVEL_JOURNEYMAN,
@@ -30,13 +31,11 @@
 		/datum/skill/labor/lumberjacking = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/labor/farming = SKILL_LEVEL_NOVICE,
 		/datum/skill/labor/fishing = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/stealing = SKILL_LEVEL_JOURNEYMAN,
 	)
 /datum/outfit/job/levy
 	belt = /obj/item/storage/belt/rogue/leather
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/lord
-	pants = /obj/item/clothing/under/roguetown/tights/random
+	pants = /obj/item/clothing/under/roguetown/tights
 	shoes = /obj/item/clothing/shoes/roguetown/shortboots
 	backr = /obj/item/storage/backpack/rogue/satchel
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
@@ -44,3 +43,8 @@
 	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 	armor = /obj/item/clothing/suit/roguetown/armor/leather
 	backl = /obj/item/rogueweapon/woodstaff
+	beltl = /obj/item/rogueweapon/mace/cudgel
+	head = /obj/item/clothing/head/roguetown/helmet/coppercap
+	backpack_contents = list(
+		/obj/item/rope = 1,
+		)
