@@ -665,7 +665,7 @@
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/grown/log/tree/small, /obj/item/grown/log/tree/small)
 	created_item = /obj/item/rogueweapon/halberd/glaive/steelpike
-	craftdiff = 2
+	craftdiff = 4
 
 /// UPGRADED WEAPONS
 
@@ -752,6 +752,13 @@
 	additional_items = list(/obj/item/grown/log/tree/small)
 	created_item = /obj/item/ammo_casing/caseless/rogue/javelin/silver
 	craftdiff = 3
+
+/datum/anvil_recipe/weapons/silver/pike
+	name = "Silver pike (+1 Small Log)"
+	req_bar = /obj/item/ingot/silver
+	additional_items = list(/obj/item/grown/log/tree/small)
+	created_item = /obj/item/rogueweapon/halberd/glaive/silverpike
+	craftdiff = 4
 
 
 // ------ BRONZE ------
@@ -949,9 +956,9 @@
 	craftdiff = 5
 
 /datum/anvil_recipe/weapons/blackpyke
-	name = "Blacksteel Pyke (+1 Blacksteel, +1 Golden Ingot, +1 silver ingot)"
+	name = "Blacksteel Pyke (+1 Blacksteel, +1 Golden Ingot"
 	req_bar = /obj/item/ingot/blacksteel
-	additional_items = list(/obj/item/ingot/blacksteel, /obj/item/ingot/gold, /obj/item/ingot/silver)
+	additional_items = list(/obj/item/ingot/blacksteel, /obj/item/ingot/gold)
 	created_item = /obj/item/rogueweapon/halberd/glaive/blackpyke
 	craftdiff = 5
 
